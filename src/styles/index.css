@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    @apply w-full;
+}
+
+main {
+    @apply max-w-[60%] mx-auto;
+}
+
+header {
+    @apply w-full max-w-[95%] mx-auto;
+}
+
+.home {
+    @apply max-w-[1080px] mx-auto;
+}
+
+.hidescroll::-webkit-scrollbar {
+    display: none;
+}
