@@ -32,7 +32,7 @@ const Header: React.FC = () => {
                 className='text-3xl font-bold text-[#4F46E5] cursor-pointer'
                 onClick={() => (window.location.href = '/')}
             >
-                MeTube
+                MyTube
             </h1>
 
             {/* Search Bar */}

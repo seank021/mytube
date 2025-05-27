@@ -63,8 +63,8 @@ const Login: React.FC = () => {
                     className='flex items-center gap-3 cursor-pointer'
                     onClick={() => (window.location.href = '/')}
                 >
-                    <img src='/icons/logo.svg' alt='MeTube Logo' className='w-6 h-6' />
-                    <span className='text-white text-lg font-medium'>MeTube</span>
+                    <img src='/icons/logo.svg' alt='MyTube Logo' className='w-6 h-6' />
+                    <span className='text-white text-lg font-medium'>MyTube</span>
                 </div>
                 <div className='text-sm'>
                     <p className='mb-1 italic'>
@@ -82,7 +82,7 @@ const Login: React.FC = () => {
                 <div className='w-full max-w-xs flex flex-col text-center gap-2'>
                     <h2 className='text-2xl font-bold text-zinc-950 mb-1'>로그인</h2>
                     <p className='text-sm text-zinc-500 mb-4'>
-                        MeTube에 로그인하고 당신의 의견을 정리해보세요.
+                        MyTube에 로그인하고 당신의 의견을 정리해보세요.
                     </p>
 
                     <input
