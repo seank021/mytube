@@ -76,7 +76,11 @@ const Comment: React.FC<CommentProps> = ({ comment, repliesData, isReply = false
     ]
 
     const [reactions, setReactions] = useState(
-        defaultReactions.map((r) => ({ ...r, count: r.initialCount, selected: false })),
+        defaultReactions.map((r) => ({
+            ...r,
+            count: r.initialCount,
+            selected: false,
+        })),
     )
 
     const toggleReaction = (index: number) => {
