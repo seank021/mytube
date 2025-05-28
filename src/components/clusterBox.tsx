@@ -2,6 +2,16 @@ import React from 'react'
 import type { ClusterType } from '../types/clusters'
 import { getAvgTimeTaken } from '../utils/getAvgTimeTaken'
 import { getWriteTime } from '../utils/getWriteTime'
+import { drawGraph } from '../utils/drawGraph'
+import {
+    LineChart,
+    Line,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    ResponsiveContainer,
+} from 'recharts'
 import { COMMENT_DATA_OPINION } from '../data/comments/fnCY6ysVkAg/opinion'
 
 interface ClusterBoxProps {
@@ -10,7 +20,32 @@ interface ClusterBoxProps {
     onClick?: (id: string) => void
 }
 
+const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+        return (
+            <div className='bg-white border border-zinc-300 rounded-md px-3 py-2 text-xs shadow-md'>
+                <p>{label}</p>
+                <p>댓글 수: {payload[0].value}</p>
+            </div>
+        )
+    }
+    return null
+}
+
 const ClusterBox: React.FC<ClusterBoxProps> = ({ cluster, isManipulationFilter, onClick }) => {
+    const avgTime = getAvgTimeTaken(COMMENT_DATA_OPINION, cluster.id, isManipulationFilter)
+    const graphRaw = drawGraph(COMMENT_DATA_OPINION, cluster.id, isManipulationFilter)
+    const graphData = graphRaw.x.map((unix, idx) => ({
+        time: new Date(unix).toLocaleTimeString('ko-KR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+        }),
+        count: graphRaw.y[idx],
+    }))
+
     return (
         <div
             className='flex justify-between items-center p-6 rounded-lg border border-zinc-200 shadow-sm cursor-pointer hover:shadow-md transition'
@@ -21,16 +56,7 @@ const ClusterBox: React.FC<ClusterBoxProps> = ({ cluster, isManipulationFilter, 
                     <h3 className='text-xl font-bold text-zinc-950'>{cluster.name}</h3>
                     <div className='flex items-center gap-1'>
                         <img src='/icons/write.svg' alt='comment' className='w-3 h-3' />
-                        <span className='text-xs text-zinc-500'>
-                            평균{' '}
-                            {getWriteTime(
-                                getAvgTimeTaken(
-                                    COMMENT_DATA_OPINION,
-                                    cluster.id,
-                                    isManipulationFilter,
-                                ),
-                            )}
-                        </span>
+                        <span className='text-xs text-zinc-500'>평균 {getWriteTime(avgTime)}</span>
                     </div>
                 </div>
                 <p className='text-sm text-zinc-500'>"{cluster.description}"</p>
@@ -56,9 +82,29 @@ const ClusterBox: React.FC<ClusterBoxProps> = ({ cluster, isManipulationFilter, 
                 </div>
             </div>
 
-            {/* Graph - TODO */}
-            <div className='h-full p-10 bg-gray-100 rounded-lg flex items-center justify-center'>
-                <p className='text-gray-500'>클러스터 그래프 (미구현)</p>
+            {/* Graph */}
+            <div className='h-full w-1/2 p-5 bg-gray-100 rounded-lg'>
+                {graphData && graphData.length > 0 ? (
+                    <ResponsiveContainer width='100%' height={150}>
+                        <LineChart data={graphData}>
+                            <CartesianGrid strokeDasharray='3 3' />
+                            <XAxis dataKey='time' hide tick={{ fontSize: 10 }} />
+                            <YAxis allowDecimals={false} width={40} tick={{ fontSize: 10 }} />
+                            <Tooltip content={<CustomTooltip />} />
+                            <Line
+                                type='monotone'
+                                dataKey='count'
+                                stroke='#4F46E5'
+                                strokeWidth={2}
+                                dot={false}
+                            />
+                        </LineChart>
+                    </ResponsiveContainer>
+                ) : (
+                    <div className='h-full p-10 bg-gray-100 rounded-lg flex items-center justify-center'>
+                        <p className='text-gray-500'>아직 댓글이 없습니다.</p>
+                    </div>
+                )}
             </div>
         </div>
     )

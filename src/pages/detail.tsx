@@ -8,6 +8,16 @@ import SortBox from '../components/sortBox'
 import Filter from '../components/filter'
 import ClusterBox from '../components/clusterBox'
 import Drawer from '../components/drawer'
+import { drawGraph } from '../utils/drawGraph'
+import {
+    LineChart,
+    Line,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    ResponsiveContainer,
+} from 'recharts'
 import { COMMENT_DATA_INFO } from '../data/comments/fnCY6ysVkAg/information'
 import { COMMENT_DATA_OPINION } from '../data/comments/fnCY6ysVkAg/opinion'
 import { COMMENT_DATA_QUESTION } from '../data/comments/fnCY6ysVkAg/question'
@@ -111,6 +121,33 @@ const Detail: React.FC = () => {
         return sorted
     }, [selectedClusterId, onlyWithNonManipulated, sortKey])
 
+    const graphData = useMemo(() => {
+        if (!selectedClusterId) return []
+        const raw = drawGraph(COMMENT_DATA_OPINION, selectedClusterId, onlyWithNonManipulated)
+        return raw.x.map((unix, i) => ({
+            time: new Date(unix).toLocaleString('ko-KR', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+            }),
+            count: raw.y[i],
+        }))
+    }, [selectedClusterId, onlyWithNonManipulated])
+
+    const CustomTooltip = ({ active, payload, label }: any) => {
+        if (active && payload?.length) {
+            return (
+                <div className='bg-white border border-zinc-300 rounded-md px-3 py-2 text-xs shadow-md'>
+                    <p>{label}</p>
+                    <p>댓글 수: {payload[0].value}</p>
+                </div>
+            )
+        }
+        return null
+    }
+
     return (
         <main className='flex flex-col gap-10 items-center justify-center'>
             {/* Video Section */}
@@ -208,9 +245,36 @@ const Detail: React.FC = () => {
                                 ))}
                             </div>
 
-                            {/* Graph - TODO */}
-                            <div className='w-full h-64 bg-gray-100 rounded-lg flex items-center justify-center mb-5'>
-                                <p className='text-gray-500'>클러스터 그래프 (미구현)</p>
+                            {/* Graph */}
+                            <div className='w-full h-64 bg-gray-100 rounded-lg mb-5'>
+                                {graphData.length > 0 ? (
+                                    <ResponsiveContainer width='100%' height='100%'>
+                                        <LineChart
+                                            data={graphData}
+                                            margin={{ top: 5, right: 10, left: 0, bottom: 30 }}
+                                        >
+                                            <CartesianGrid strokeDasharray='3 3' />
+                                            <XAxis dataKey='time' hide tick={{ fontSize: 10 }} />
+                                            <YAxis
+                                                allowDecimals={false}
+                                                width={40}
+                                                tick={{ fontSize: 10 }}
+                                            />
+                                            <Tooltip content={<CustomTooltip />} />
+                                            <Line
+                                                type='monotone'
+                                                dataKey='count'
+                                                stroke='#4F46E5'
+                                                strokeWidth={2}
+                                                dot={false}
+                                            />
+                                        </LineChart>
+                                    </ResponsiveContainer>
+                                ) : (
+                                    <div className='w-full h-full flex items-center justify-center'>
+                                        <p className='text-gray-500'>아직 댓글이 없습니다.</p>
+                                    </div>
+                                )}
                             </div>
 
                             {/* Cluster Information */}
