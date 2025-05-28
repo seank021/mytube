@@ -12,12 +12,13 @@ import {
     Tooltip,
     ResponsiveContainer,
 } from 'recharts'
-import { COMMENT_DATA_OPINION } from '../data/comments/fnCY6ysVkAg/opinion'
+import type { CommentType } from '../types/comments'
 
 interface ClusterBoxProps {
     cluster: ClusterType
     isManipulationFilter: boolean
     onClick?: (id: string) => void
+    comments: CommentType[]
 }
 
 const CustomTooltip = ({ active, payload, label }: any) => {
@@ -32,9 +33,14 @@ const CustomTooltip = ({ active, payload, label }: any) => {
     return null
 }
 
-const ClusterBox: React.FC<ClusterBoxProps> = ({ cluster, isManipulationFilter, onClick }) => {
-    const avgTime = getAvgTimeTaken(COMMENT_DATA_OPINION, cluster.id, isManipulationFilter)
-    const graphRaw = drawGraph(COMMENT_DATA_OPINION, cluster.id, isManipulationFilter)
+const ClusterBox: React.FC<ClusterBoxProps> = ({
+    cluster,
+    isManipulationFilter,
+    onClick,
+    comments,
+}) => {
+    const avgTime = getAvgTimeTaken(comments, cluster.id, isManipulationFilter)
+    const graphRaw = drawGraph(comments, cluster.id, isManipulationFilter)
     const graphData = graphRaw.x.map((unix, idx) => ({
         time: new Date(unix).toLocaleTimeString('ko-KR', {
             year: 'numeric',

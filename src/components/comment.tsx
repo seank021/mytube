@@ -17,13 +17,24 @@ type Reaction = {
     selectedColorClass: string
 }
 
+type AddCommentType = (
+    newComment: CommentType | { parentCommentId: string; reply: CommentType },
+    tabs?: string[],
+) => void
+
 type CommentProps = {
     comment: CommentType
     repliesData: ReplyType[]
     isReply?: boolean
+    onAddComment?: AddCommentType
 }
 
-const Comment: React.FC<CommentProps> = ({ comment, repliesData, isReply = false }) => {
+const Comment: React.FC<CommentProps> = ({
+    comment,
+    repliesData,
+    isReply = false,
+    onAddComment,
+}) => {
     const [showReplies, setShowReplies] = useState(false)
     const [showReplyForm, setShowReplyForm] = useState(false)
     const [showReport, setShowReport] = useState(false)
@@ -294,7 +305,13 @@ const Comment: React.FC<CommentProps> = ({ comment, repliesData, isReply = false
                             isReply={true}
                         />
                     ))}
-                    <CommentWriteForm key={TEST_USER.id} user={TEST_USER} commentType='대댓글' />
+                    <CommentWriteForm
+                        key={TEST_USER.id}
+                        user={TEST_USER}
+                        commentType='대댓글'
+                        parentCommentId={comment.comment_id}
+                        onAddComment={onAddComment}
+                    />
                 </div>
             )}
 
@@ -307,6 +324,11 @@ const Comment: React.FC<CommentProps> = ({ comment, repliesData, isReply = false
                             key={TEST_USER.id}
                             user={TEST_USER}
                             commentType='대댓글'
+                            parentCommentId={comment.comment_id}
+                            onAddComment={(newReply, tabs) => {
+                                onAddComment?.(newReply, tabs)
+                                setShowReplies(true)
+                            }}
                         />
                     </div>
                 )}

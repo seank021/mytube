@@ -18,6 +18,7 @@ import {
     Tooltip,
     ResponsiveContainer,
 } from 'recharts'
+import type { CommentType } from '../types/comments'
 import { COMMENT_DATA_INFO } from '../data/comments/fnCY6ysVkAg/information'
 import { COMMENT_DATA_OPINION } from '../data/comments/fnCY6ysVkAg/opinion'
 import { COMMENT_DATA_QUESTION } from '../data/comments/fnCY6ysVkAg/question'
@@ -50,46 +51,72 @@ const Detail: React.FC = () => {
             <div className='p-10 text-center text-xl text-red-500'>비디오를 찾을 수 없습니다.</div>
         )
 
-    const rawComments = useMemo(() => {
-        switch (tab) {
-            case 'information':
-                return COMMENT_DATA_INFO
-            case 'opinion':
-                return COMMENT_DATA_OPINION
-            case 'question':
-                return COMMENT_DATA_QUESTION
-            default:
-                return COMMENT_DATA_INFO
+    const [commentsByTab, setCommentsByTab] = useState<Record<string, CommentType[]>>({
+        information: COMMENT_DATA_INFO,
+        opinion: COMMENT_DATA_OPINION,
+        question: COMMENT_DATA_QUESTION,
+    })
+
+    const comments = useMemo(() => commentsByTab[tab] || [], [commentsByTab, tab])
+
+    type AddCommentType = (
+        newComment: CommentType | { parentCommentId: string; reply: CommentType },
+        tabs?: string[],
+        clusterId?: string | null,
+    ) => void
+
+    const handleAddComment: AddCommentType = (newComment, tabs, clusterId) => {
+        if ('parentCommentId' in newComment) {
+            setCommentsByTab((prev) => {
+                const updated = { ...prev }
+                for (const key in updated) {
+                    updated[key] = updated[key].map((c) =>
+                        c.comment_id === newComment.parentCommentId
+                            ? {
+                                  ...c,
+                                  replies: [...(c.replies || []), newComment.reply],
+                                  reply_ids: [...(c.reply_ids || []), newComment.reply.comment_id],
+                              }
+                            : c,
+                    )
+                }
+                return updated
+            })
+        } else {
+            const commentWithMeta = {
+                ...newComment,
+                tab: tabs,
+                cluster: clusterId || null,
+                reply_ids: [],
+                replies: [],
+            }
+
+            setCommentsByTab((prev) => {
+                const updated = { ...prev }
+                tabs?.forEach((t) => {
+                    updated[t] = [commentWithMeta, ...(updated[t] || [])]
+                })
+                return updated
+            })
         }
-    }, [tab])
+    }
 
     const sortedComments = useMemo(() => {
-        if (sortKey === 'latest') {
-            return [...rawComments].sort(
-                (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
-            )
-        }
-
-        return [...rawComments].sort((a, b) => {
-            const aVal = a.reactions?.[sortKey as keyof typeof a.reactions] || 0
-            const bVal = b.reactions?.[sortKey as keyof typeof b.reactions] || 0
-            return bVal - aVal
-        })
-    }, [rawComments, sortKey])
+        const base = [...comments]
+        return sortKey === 'latest'
+            ? base.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+            : base.sort((a, b) => (b.reactions?.[sortKey] || 0) - (a.reactions?.[sortKey] || 0))
+    }, [comments, sortKey])
 
     const filteredCommentsWithReplies = useMemo(() => {
-        const base = [...rawComments]
-        const sorted =
-            sortKey === 'latest'
-                ? base.sort(
-                      (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
-                  )
-                : base.sort((a, b) => (b.reactions?.[sortKey] || 0) - (a.reactions?.[sortKey] || 0))
-
-        return onlyWithReplies
-            ? sorted.filter((c) => c.reply_ids && c.reply_ids.length > 0)
-            : sorted
-    }, [rawComments, sortKey, onlyWithReplies])
+        const base = comments.filter((comment) => {
+            const hasReplies = comment.replies && comment.replies.length > 0
+            return onlyWithReplies ? hasReplies : true
+        })
+        return sortKey === 'latest'
+            ? base.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+            : base.sort((a, b) => (b.reactions?.[sortKey] || 0) - (a.reactions?.[sortKey] || 0))
+    }, [comments, sortKey, onlyWithReplies])
 
     const filteredCommentsByCluster = useMemo(() => {
         if (!selectedClusterId) return []
@@ -97,17 +124,19 @@ const Detail: React.FC = () => {
         const shouldInclude = (manipulated: boolean) =>
             onlyWithNonManipulated ? !manipulated : true
 
-        const filtered = COMMENT_DATA_OPINION.filter(
-            (comment) =>
-                comment.cluster === selectedClusterId && shouldInclude(comment.manipulated),
-        ).map((comment) => {
-            const replies =
-                comment.replies?.filter((reply) => shouldInclude(reply.manipulated)) || []
-            return {
-                ...comment,
-                replies,
-            }
-        })
+        const filtered = comments
+            .filter(
+                (comment) =>
+                    comment.cluster === selectedClusterId && shouldInclude(comment.manipulated),
+            )
+            .map((comment) => {
+                const replies =
+                    comment.replies?.filter((reply) => shouldInclude(reply.manipulated)) || []
+                return {
+                    ...comment,
+                    replies,
+                }
+            })
 
         const sorted =
             sortKey === 'latest'
@@ -119,11 +148,17 @@ const Detail: React.FC = () => {
                   )
 
         return sorted
-    }, [selectedClusterId, onlyWithNonManipulated, sortKey])
+    }, [selectedClusterId, onlyWithNonManipulated, sortKey, comments])
 
     const graphData = useMemo(() => {
         if (!selectedClusterId) return []
-        const raw = drawGraph(COMMENT_DATA_OPINION, selectedClusterId, onlyWithNonManipulated)
+        const filteredOpinionComments = comments.filter(
+            (comment) =>
+                comment.tab?.includes('opinion') &&
+                comment.cluster === selectedClusterId &&
+                (!onlyWithNonManipulated || !comment.manipulated),
+        )
+        const raw = drawGraph(filteredOpinionComments, selectedClusterId, onlyWithNonManipulated)
         return raw.x.map((unix, i) => ({
             time: new Date(unix).toLocaleString('ko-KR', {
                 year: 'numeric',
@@ -134,7 +169,7 @@ const Detail: React.FC = () => {
             }),
             count: raw.y[i],
         }))
-    }, [selectedClusterId, onlyWithNonManipulated])
+    }, [selectedClusterId, onlyWithNonManipulated, comments])
 
     const CustomTooltip = ({ active, payload, label }: any) => {
         if (active && payload?.length) {
@@ -168,7 +203,12 @@ const Detail: React.FC = () => {
             </div>
 
             {/* Comment Write Section */}
-            <CommentWriteForm key={TEST_USER.id} user={TEST_USER} commentType='댓글' />
+            <CommentWriteForm
+                key={TEST_USER.id}
+                user={TEST_USER}
+                commentType='댓글'
+                onAddComment={handleAddComment}
+            />
 
             {/* Tab Section */}
             <Tab tab={tab} setTab={setTab} />
@@ -190,6 +230,7 @@ const Detail: React.FC = () => {
                                     key={comment.comment_id}
                                     comment={comment}
                                     repliesData={comment.replies || []}
+                                    onAddComment={handleAddComment}
                                 />
                             ))}
                     </div>
@@ -222,6 +263,7 @@ const Detail: React.FC = () => {
                                     cluster={cluster}
                                     isManipulationFilter={onlyWithNonManipulated}
                                     onClick={() => setSelectedClusterId(cluster.id)}
+                                    comments={comments}
                                 />
                             ))}
                     </div>
@@ -299,6 +341,7 @@ const Detail: React.FC = () => {
                                     key={c.comment_id}
                                     comment={c}
                                     repliesData={'replies' in c ? c.replies || [] : []}
+                                    onAddComment={handleAddComment}
                                 />
                             ))}
                         </div>
@@ -329,6 +372,7 @@ const Detail: React.FC = () => {
                                     key={comment.comment_id}
                                     comment={comment}
                                     repliesData={comment.replies || []}
+                                    onAddComment={handleAddComment}
                                 />
                             ))}
                     </div>
