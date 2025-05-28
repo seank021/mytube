@@ -1,7 +1,7 @@
-const API_URL = 'https://hci-aiml.onrender.com/classify'
+// const API_URL = 'https://hci-aiml.onrender.com/classify'
 
 export const checkHateAndTabCluster = async (
-    text: string,
+    // text: string,
 ): Promise<[string, string[], string | null] | ['error']> => {
     try {
         // const response = await fetch(API_URL, {
