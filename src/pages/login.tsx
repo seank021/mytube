@@ -13,14 +13,11 @@ const Login: React.FC = () => {
     const onClickLogin = () => {
         if (id === 'test' && password === 'test1234') {
             localStorage.setItem('isUser', 'true')
-            setToast({
-                type: 'success',
-                message: '로그인 성공! 환영합니다, 테스트 유저님.',
-            })
+            setToast({ type: 'success', message: '로그인 성공! 환영합니다, 테스트 유저님.' })
             setTimeout(() => {
                 setToast(null)
                 window.location.href = '/'
-            }, 1000)
+            }, 1500)
         } else {
             setToast({
                 type: 'failure',

@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useState, useRef } from 'react'
+import LoginPopover from './loginPopover'
+import Toast from './toast'
 import type { UserType } from '../types/users'
 
 type CommentWriteFormProps = {
@@ -8,28 +9,48 @@ type CommentWriteFormProps = {
 }
 
 const CommentWriteForm: React.FC<CommentWriteFormProps> = ({ user, commentType }) => {
-    const navigate = useNavigate()
-
     const isUser: boolean = localStorage.getItem('isUser') === 'true'
-
     const [text, setText] = useState('')
+    const [showLoginPopover, setShowLoginPopover] = useState(false)
+    const containerRef = useRef<HTMLDivElement>(null)
+    const [toast, setToast] = useState<{
+        type: 'success' | 'failure'
+        message: string
+        errorDetail?: string
+    } | null>(null)
 
-    const handleSubmit = () => {
+    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         if (!isUser) {
-            const confirmLogin = window.confirm(
-                '댓글을 작성하려면 로그인이 필요합니다.\n로그인 화면으로 이동하시겠습니까?',
-            )
-            if (confirmLogin) navigate('/login')
+            setShowLoginPopover(true)
             return
         }
-        if (text.trim() === '') return
+        setText(e.target.value)
+    }
+
+    const handleSubmit = () => {
+        if (text.trim() === '') {
+            setToast({
+                type: 'failure',
+                message: '댓글 내용을 작성해주세요.',
+            })
+            setTimeout(() => setToast(null), 1500)
+            return
+        }
+
+        // TODO: LLM api 연결
         console.log('작성된 댓글:', text)
+        setToast({
+            type: 'success',
+            message: '댓글이 성공적으로 작성되었습니다.',
+        })
+        setTimeout(() => setToast(null), 1500)
+        setText('')
     }
 
     const isActive = text.trim().length > 0
 
     return (
-        <div className='flex items-start gap-5 w-full'>
+        <div className='relative flex items-start gap-5 w-full' ref={containerRef}>
             <img
                 src={user.profile_image}
                 alt='User'
@@ -39,7 +60,7 @@ const CommentWriteForm: React.FC<CommentWriteFormProps> = ({ user, commentType }
             <div className='relative flex-1 bg-zinc-100 rounded-md px-4 py-3 h-[100px]'>
                 <textarea
                     value={text}
-                    onChange={(e) => setText(e.target.value)}
+                    onChange={handleChange}
                     placeholder={
                         isUser
                             ? `${user.name} 님의 ${commentType}을 남겨보세요!`
@@ -60,6 +81,19 @@ const CommentWriteForm: React.FC<CommentWriteFormProps> = ({ user, commentType }
                     등록
                 </button>
             </div>
+
+            {/* Login Popover */}
+            {showLoginPopover && (
+                <LoginPopover
+                    message='댓글을 작성하려면'
+                    onCancel={() => setShowLoginPopover(false)}
+                />
+            )}
+
+            {/* Toast Notification */}
+            {toast && (
+                <Toast type={toast.type} message={toast.message} errorDetail={toast.errorDetail} />
+            )}
         </div>
     )
 }
