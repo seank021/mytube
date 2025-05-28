@@ -11,15 +11,9 @@ export const getFilteredCommentsAndReplies = (
         if (comment.cluster !== cluster) return []
 
         const results = []
-
         if (shouldInclude(comment.manipulated)) {
             results.push(comment)
         }
-
-        if (comment.replies) {
-            results.push(...comment.replies.filter((r) => shouldInclude(r.manipulated)))
-        }
-
         return results
     })
 }
