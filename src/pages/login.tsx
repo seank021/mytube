@@ -17,7 +17,7 @@ const Login: React.FC = () => {
             setTimeout(() => {
                 setToast(null)
                 window.location.href = '/'
-            }, 1500)
+            }, 1000)
         } else {
             setToast({
                 type: 'failure',
