@@ -1,26 +1,15 @@
 import React, { useState } from 'react'
-import Toast from './toast'
+import AuthPopover from './authPopover'
 
 const Header: React.FC = () => {
-    const [toast, setToast] = useState<{
-        type: 'success' | 'failure'
-        message: string
-        errorDetail?: string
-    } | null>(null)
-
     const onClickLogin = () => {
         window.location.href = '/login'
     }
 
+    const [showAuthPopover, setShowAuthPopover] = useState(false)
+
     const onClickLogout = () => {
-        if (window.confirm('로그아웃 하시겠습니까?')) {
-            localStorage.removeItem('isUser')
-            setToast({ type: 'success', message: '로그아웃 되었습니다.' })
-            setTimeout(() => {
-                setToast(null)
-                window.location.reload()
-            }, 1000)
-        }
+        setShowAuthPopover(true)
     }
 
     const isUser: boolean = localStorage.getItem('isUser') === 'true'
@@ -75,9 +64,9 @@ const Header: React.FC = () => {
                 </button>
             )}
 
-            {/* Toast Notification */}
-            {toast && (
-                <Toast type={toast.type} message={toast.message} errorDetail={toast.errorDetail} />
+            {/* Auth Popover */}
+            {showAuthPopover && (
+                <AuthPopover type='logout' message='' onCancel={() => setShowAuthPopover(false)} />
             )}
         </header>
     )

@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import LoginPopover from './loginPopover'
+import AuthPopover from './authPopover'
 import Toast from './toast'
 import type { UserType } from '../types/users'
 
@@ -11,7 +11,7 @@ type CommentWriteFormProps = {
 const CommentWriteForm: React.FC<CommentWriteFormProps> = ({ user, commentType }) => {
     const isUser: boolean = localStorage.getItem('isUser') === 'true'
     const [text, setText] = useState('')
-    const [showLoginPopover, setShowLoginPopover] = useState(false)
+    const [showAuthPopover, setShowAuthPopover] = useState(false)
     const containerRef = useRef<HTMLDivElement>(null)
     const [toast, setToast] = useState<{
         type: 'success' | 'failure'
@@ -21,7 +21,7 @@ const CommentWriteForm: React.FC<CommentWriteFormProps> = ({ user, commentType }
 
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         if (!isUser) {
-            setShowLoginPopover(true)
+            setShowAuthPopover(true)
             return
         }
         setText(e.target.value)
@@ -82,11 +82,12 @@ const CommentWriteForm: React.FC<CommentWriteFormProps> = ({ user, commentType }
                 </button>
             </div>
 
-            {/* Login Popover */}
-            {showLoginPopover && (
-                <LoginPopover
-                    message='댓글을 작성하려면'
-                    onCancel={() => setShowLoginPopover(false)}
+            {/* Auth Popover */}
+            {showAuthPopover && (
+                <AuthPopover
+                    type='login'
+                    message='댓글을 작성하려면 '
+                    onCancel={() => setShowAuthPopover(false)}
                 />
             )}
 

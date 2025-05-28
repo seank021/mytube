@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import ReportPopover from './reportPopover'
 import Toast from './toast'
-import LoginPopover from './loginPopover'
+import AuthPopover from './authPopover'
 import { getWriteTime } from '../utils/getWriteTime'
 import { getTimeAgo } from '../utils/getTimeAgo'
 import type { CommentType, ReplyType } from '../types/comments'
@@ -33,8 +33,8 @@ const Comment: React.FC<CommentProps> = ({ comment, repliesData, isReply = false
         errorDetail?: string
     } | null>(null)
     const isUser: boolean = localStorage.getItem('isUser') === 'true'
-    const [showLoginPopoverReaction, setShowLoginPopoverReaction] = useState(false)
-    const [showLoginPopoverReport, setShowLoginPopoverReport] = useState(false)
+    const [showAuthPopoverReaction, setShowAuthPopoverReaction] = useState(false)
+    const [showAuthPopoverReport, setShowAuthPopoverReport] = useState(false)
 
     const defaultReactions: Reaction[] = [
         {
@@ -85,7 +85,7 @@ const Comment: React.FC<CommentProps> = ({ comment, repliesData, isReply = false
 
     const toggleReaction = (index: number) => {
         if (!isUser) {
-            setShowLoginPopoverReaction(true)
+            setShowAuthPopoverReaction(true)
             return
         }
         setReactions((prev) =>
@@ -104,7 +104,7 @@ const Comment: React.FC<CommentProps> = ({ comment, repliesData, isReply = false
     const onClickReport = (e: React.MouseEvent<HTMLImageElement>) => {
         e.stopPropagation()
         if (!isUser) {
-            setShowLoginPopoverReport(true)
+            setShowAuthPopoverReport(true)
             return
         }
         setShowReport((prev) => !prev)
@@ -278,19 +278,21 @@ const Comment: React.FC<CommentProps> = ({ comment, repliesData, isReply = false
                 <Toast type={toast.type} message={toast.message} errorDetail={toast.errorDetail} />
             )}
 
-            {/* Login Popover - Reaction */}
-            {showLoginPopoverReaction && (
-                <LoginPopover
-                    message='공감하려면'
-                    onCancel={() => setShowLoginPopoverReaction(false)}
+            {/* Auth Popover - Reaction */}
+            {showAuthPopoverReaction && (
+                <AuthPopover
+                    type='login'
+                    message='공감하려면 '
+                    onCancel={() => setShowAuthPopoverReaction(false)}
                 />
             )}
 
-            {/* Login Popover - Report */}
-            {showLoginPopoverReport && (
-                <LoginPopover
-                    message='신고하려면'
-                    onCancel={() => setShowLoginPopoverReport(false)}
+            {/* Auth Popover - Report */}
+            {showAuthPopoverReport && (
+                <AuthPopover
+                    type='login'
+                    message='신고하려면 '
+                    onCancel={() => setShowAuthPopoverReport(false)}
                 />
             )}
         </div>
