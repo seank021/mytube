@@ -22,7 +22,7 @@ export const checkHateAndTabCluster = async (
         const tab = result?.tab_cluster.tab
         const cluster = result?.tab_cluster.cluster
 
-        if (tab.contains('opinion') && cluster === null) {
+        if ('opinion' in tab && cluster === null) {
             return [hate, tab, 'cluster_C'] // 중립으로 처리
         }
 
