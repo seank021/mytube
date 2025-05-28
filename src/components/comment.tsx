@@ -35,6 +35,7 @@ const Comment: React.FC<CommentProps> = ({ comment, repliesData, isReply = false
     const isUser: boolean = localStorage.getItem('isUser') === 'true'
     const [showAuthPopoverReaction, setShowAuthPopoverReaction] = useState(false)
     const [showAuthPopoverReport, setShowAuthPopoverReport] = useState(false)
+    const [isReported, setIsReported] = useState(false)
 
     const defaultReactions: Reaction[] = [
         {
@@ -113,13 +114,50 @@ const Comment: React.FC<CommentProps> = ({ comment, repliesData, isReply = false
     const handleReportSubmit = (reason: string[], commentID: string) => {
         console.log(`신고 사유: ${reason.join(', ')}, 댓글 ID: ${commentID}`)
         setShowReport(false)
-        setToast({ type: 'success', message: '신고가 성공적으로 이루어졌습니다.' })
+        setToast({
+            type: 'success',
+            message: '신고가 성공적으로 이루어졌습니다.\n신고하신 댓글은 숨겨집니다.',
+        })
         setTimeout(() => setToast(null), 1500)
+        setIsReported(true)
     }
 
     const handleReportCancel = () => {
         setShowReport(false)
     }
+
+    if (isReported)
+        // Do not show the comment if it is reported, but still show the toast and auth popover
+        return (
+            <>
+                {/* Toast Notification */}
+                {toast && (
+                    <Toast
+                        type={toast.type}
+                        message={toast.message}
+                        errorDetail={toast.errorDetail}
+                    />
+                )}
+
+                {/* Auth Popover - Reaction */}
+                {showAuthPopoverReaction && (
+                    <AuthPopover
+                        type='login'
+                        message='공감하려면 '
+                        onCancel={() => setShowAuthPopoverReaction(false)}
+                    />
+                )}
+
+                {/* Auth Popover - Report */}
+                {showAuthPopoverReport && (
+                    <AuthPopover
+                        type='login'
+                        message='신고하려면 '
+                        onCancel={() => setShowAuthPopoverReport(false)}
+                    />
+                )}
+            </>
+        )
 
     return (
         <div className='flex flex-col w-full'>

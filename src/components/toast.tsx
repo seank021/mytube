@@ -15,7 +15,7 @@ const Toast: React.FC<{
                         className='w-6 h-6'
                     />
                     <p
-                        className={`text-sm text-zinc-950 ${type === 'failure' ? 'font-semibold' : ''}`}
+                        className={`text-sm text-zinc-950 whitespace-pre-wrap ${type === 'failure' ? 'font-semibold' : ''}`}
                     >
                         {message}
                     </p>
