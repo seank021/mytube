@@ -24,7 +24,7 @@ const Toast: React.FC<{
                 {type === 'failure' && errorDetail && <p className='text-xs'>{errorDetail}</p>}
             </div>
         </div>,
-        document.body
+        document.body,
     )
 }
 
