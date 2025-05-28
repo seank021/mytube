@@ -60,8 +60,7 @@ const CommentWriteForm: React.FC<CommentWriteFormProps> = ({
         }
 
         const hateAndTabClusterResult: [string, string[], string | null] | ['error'] =
-            // await checkHateAndTabCluster(text)
-            await checkHateAndTabCluster()
+            await checkHateAndTabCluster(text)
         if (hateAndTabClusterResult[0] === 'hate') {
             setToast({
                 type: 'failure',

@@ -1,33 +1,28 @@
-// const API_URL = 'https://hci-aiml.onrender.com/classify'
+const API_URL = 'https://hci-aiml.onrender.com/classify'
 
 export const checkHateAndTabCluster = async (
-    // text: string,
+    text: string,
 ): Promise<[string, string[], string | null] | ['error']> => {
     try {
-        // const response = await fetch(API_URL, {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({ comment: text }),
-        // })
+        console.log('checkHateAndTabCluster called with text:', text)
+        
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ comment: text }),
+        })
 
-        // const result = await response.json()
+        const result = await response.json()
 
-        // const hate = result?.hate
-        // const tabCluster = result?.tab_cluster
+        const hate = result?.hate.label
+        const tab = result?.tab_cluster.tab
+        const cluster = result?.tab_cluster.cluster
 
-        // console.log('hate:', hate)
-        // console.log('tab_cluster:', tabCluster)
+        console.log(hate, tab, cluster)
 
-        return ['non-hate', ['information', 'opinion'], 'cluster_B']
-
-        // if (label === 'hate' || label === 'non-hate') {
-        //     return label
-        // } else {
-        //     console.error('예상치 못한 응답 형식:', result)
-        //     return 'error'
-        // }
+        return [hate, tab, cluster || null]
     } catch (err) {
         console.error('API 호출 중 오류:', err)
         return ['error']
