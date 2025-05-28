@@ -16,11 +16,15 @@ export const checkHateAndTabCluster = async (
 
         const result = await response.json()
 
+        console.log('API response:', result)
+
         const hate = result?.hate.label
         const tab = result?.tab_cluster.tab
         const cluster = result?.tab_cluster.cluster
 
-        console.log(hate, tab, cluster)
+        if (tab.contains('opinion') && cluster === null) {
+            return [hate, tab, 'cluster_C'] // 중립으로 처리
+        }
 
         return [hate, tab, cluster || null]
     } catch (err) {
