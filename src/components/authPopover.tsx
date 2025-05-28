@@ -26,7 +26,7 @@ const AuthPopover: React.FC<AuthPopoverProps> = ({ type, message, onCancel }) =>
             setTimeout(() => {
                 setToast(null)
                 window.location.reload()
-            }, 1000)
+            }, 500)
         }
     }
 
