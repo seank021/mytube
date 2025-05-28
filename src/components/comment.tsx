@@ -110,8 +110,8 @@ const Comment: React.FC<CommentProps> = ({ comment, repliesData, isReply = false
         setShowReport((prev) => !prev)
     }
 
-    const handleReportSubmit = (reason: string, commentID: string) => {
-        console.log(`신고 사유: ${reason}, 댓글 ID: ${commentID}`)
+    const handleReportSubmit = (reason: string[], commentID: string) => {
+        console.log(`신고 사유: ${reason.join(', ')}, 댓글 ID: ${commentID}`)
         setShowReport(false)
         setToast({ type: 'success', message: '신고가 성공적으로 이루어졌습니다.' })
         setTimeout(() => setToast(null), 1500)

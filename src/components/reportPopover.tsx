@@ -10,9 +10,20 @@ const REPORT_REASONS: string[] = [
 
 const ReportPopover: React.FC<{
     onCancel: () => void
-    onSubmit: (reason: string) => void
+    onSubmit: (reason: string[]) => void
 }> = ({ onCancel, onSubmit }) => {
-    const [selected, setSelected] = useState('')
+    const [selected, setSelected] = useState<Set<string>>(new Set())
+
+    const toggleReason = (reason: string) => {
+        setSelected((prev) => {
+            const next = new Set(prev)
+            if (next.has(reason)) next.delete(reason)
+            else next.add(reason)
+            return next
+        })
+    }
+
+    const selectedArray = Array.from(selected)
 
     return (
         <div className='flex flex-col bg-white rounded-xl shadow-lg border px-6 py-4 w-[320px] gap-3'>
@@ -21,9 +32,9 @@ const ReportPopover: React.FC<{
                 {REPORT_REASONS.map((reason) => (
                     <button
                         key={reason}
-                        onClick={() => setSelected(reason)}
+                        onClick={() => toggleReason(reason)}
                         className={`px-2 py-1 rounded-lg border text-sm transition ${
-                            selected === reason
+                            selected.has(reason)
                                 ? 'bg-[#4F46E5] text-white border-[#4F46E5]'
                                 : 'bg-white border-zinc-200 hover:bg-zinc-100'
                         }`}
@@ -43,7 +54,7 @@ const ReportPopover: React.FC<{
                             ? 'bg-[#4F46E5] text-white hover:bg-[#4338CA]'
                             : 'bg-[#C7D2FE] text-white opacity-50'
                     }`}
-                    onClick={() => onSubmit(selected)}
+                    onClick={() => onSubmit(selectedArray)}
                 >
                     결정
                 </button>
