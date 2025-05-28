@@ -9,6 +9,7 @@ type CommentWriteFormProps = {
     commentType: string // 예: '댓글', '대댓글'
     parentCommentId?: string // 대댓글 작성 시 필요
     onAddComment?: (newComment: any, tabs?: string[], clusterId?: string | null) => void
+    onSuccessWithMessage?: (message: string) => void
 }
 
 const TABS: Record<string, string> = {
@@ -30,6 +31,7 @@ const CommentWriteForm: React.FC<CommentWriteFormProps> = ({
     commentType,
     parentCommentId,
     onAddComment,
+    onSuccessWithMessage,
 }) => {
     const isUser: boolean = localStorage.getItem('isUser') === 'true'
     const [text, setText] = useState('')
@@ -59,63 +61,77 @@ const CommentWriteForm: React.FC<CommentWriteFormProps> = ({
             return
         }
 
-        const hateAndTabClusterResult: [string, string[], string | null] | ['error'] =
-            await checkHateAndTabCluster(text)
-        if (hateAndTabClusterResult[0] === 'hate') {
-            setToast({
-                type: 'failure',
-                message: '악성 댓글로 감지되어 등록이 제한됩니다.',
-                errorDetail: '부적절한 내용을 제거 후 다시 시도해주세요.',
-            })
-            setTimeout(() => setToast(null), 2000)
-            setText('')
-            return
-        } else if (hateAndTabClusterResult[0] === 'error') {
-            setToast({
-                type: 'failure',
-                message: '댓글 등록 중 오류가 발생했습니다.',
-                errorDetail: '서버와의 통신에 실패했습니다. 잠시 후 다시 시도해주세요.',
-            })
-            setTimeout(() => setToast(null), 2000)
-            return
-        }
-
-        // 'none-hate': tab, cluster
-        const newComment = {
-            comment_id: Date.now().toString() + Math.random().toString(36).substring(2, 15),
-            author_id: user.id,
-            author_name: user.name,
-            author_profile_image: user.profile_image,
-            timestamp: new Date().toISOString(),
-            content: text,
-            reactions: {
-                useful: 0,
-                agree: 0,
-                curious: 0,
-                creative: 0,
-                disagree: 0,
-            },
-            time_taken_to_write: Math.floor(Math.random() * 200) + 1, // 1초에서 200초 사이의 랜덤 시간
-            manipulated: false,
-            tab: hateAndTabClusterResult[1],
-            cluster: hateAndTabClusterResult[2] || null,
-        }
-
         if (parentCommentId && onAddComment) {
             // 대댓글 작성 시
-            const newReply = {
-                ...newComment,
+            const newComment = {
+                comment_id: Date.now().toString() + Math.random().toString(36).substring(2, 15),
+                author_id: user.id,
+                author_name: user.name,
+                author_profile_image: user.profile_image,
+                timestamp: new Date().toISOString(),
+                content: text,
+                reactions: {
+                    useful: 0,
+                    agree: 0,
+                    curious: 0,
+                    creative: 0,
+                    disagree: 0,
+                },
+                time_taken_to_write: Math.floor(Math.random() * 200) + 1, // 1초에서 200초 사이의 랜덤 시간
+                manipulated: false,
             }
-            onAddComment({ parentCommentId, reply: newReply })
 
-            setToast({
-                type: 'success',
-                message: '대댓글이 등록되었습니다.',
-            })
-            setTimeout(() => setToast(null), 1500)
+            onAddComment({ parentCommentId, reply: newComment })
+
+            if (onSuccessWithMessage) {
+                onSuccessWithMessage('대댓글이 등록되었습니다.')
+            }
             setText('')
+            return
         } else if (onAddComment) {
             // 상위 댓글 작성 시
+            const hateAndTabClusterResult: [string, string[], string | null] | ['error'] =
+                await checkHateAndTabCluster(text)
+            if (hateAndTabClusterResult[0] === 'hate') {
+                setToast({
+                    type: 'failure',
+                    message: '악성 댓글로 감지되어 등록이 제한됩니다.',
+                    errorDetail: '부적절한 내용을 제거 후 다시 시도해주세요.',
+                })
+                setTimeout(() => setToast(null), 2000)
+                setText('')
+                return
+            } else if (hateAndTabClusterResult[0] === 'error') {
+                setToast({
+                    type: 'failure',
+                    message: '댓글 등록 중 오류가 발생했습니다.',
+                    errorDetail: '서버와의 통신에 실패했습니다. 잠시 후 다시 시도해주세요.',
+                })
+                setTimeout(() => setToast(null), 2000)
+                return
+            }
+
+            // 'none-hate': tab, cluster
+            const newComment = {
+                comment_id: Date.now().toString() + Math.random().toString(36).substring(2, 15),
+                author_id: user.id,
+                author_name: user.name,
+                author_profile_image: user.profile_image,
+                timestamp: new Date().toISOString(),
+                content: text,
+                reactions: {
+                    useful: 0,
+                    agree: 0,
+                    curious: 0,
+                    creative: 0,
+                    disagree: 0,
+                },
+                time_taken_to_write: Math.floor(Math.random() * 200) + 1, // 1초에서 200초 사이의 랜덤 시간
+                manipulated: false,
+                tab: hateAndTabClusterResult[1],
+                cluster: hateAndTabClusterResult[2] || null,
+            }
+
             onAddComment(
                 { ...newComment, reply_ids: [], replies: [] },
                 hateAndTabClusterResult[1] || [],

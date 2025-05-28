@@ -310,7 +310,14 @@ const Comment: React.FC<CommentProps> = ({
                         user={TEST_USER}
                         commentType='대댓글'
                         parentCommentId={comment.comment_id}
-                        onAddComment={onAddComment}
+                        onAddComment={(newReply, tabs) => {
+                            onAddComment?.(newReply, tabs)
+                            setShowReplies(true)
+                        }}
+                        onSuccessWithMessage={(msg) => {
+                            setToast({ type: 'success', message: msg })
+                            setTimeout(() => setToast(null), 1500)
+                        }}
                     />
                 </div>
             )}
@@ -328,6 +335,10 @@ const Comment: React.FC<CommentProps> = ({
                             onAddComment={(newReply, tabs) => {
                                 onAddComment?.(newReply, tabs)
                                 setShowReplies(true)
+                            }}
+                            onSuccessWithMessage={(msg) => {
+                                setToast({ type: 'success', message: msg })
+                                setTimeout(() => setToast(null), 1500)
                             }}
                         />
                     </div>
