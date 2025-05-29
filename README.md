@@ -1,54 +1,23 @@
-# React + TypeScript + Vite
+# MyTube
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+균형 잡힌 의견 형성을 위해 최적화된 댓글 인터페이스 플랫폼입니다.
 
-Currently, two official plugins are available:
+## About
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+**MyTube**는 영상의 댓글을 정보 / 의견 / 질문 탭으로 분류하고, 조작 가능성이 있는 댓글을 필터링하며, 유사한 의견끼리 클러스터링하며, 댓글 트래픽 데이터를 보여주어 사용자에게 더 균형 잡힌 여론을 보여주는 웹 애플리케이션입니다. 
+청소년 사용자나 다양한 의견을 접하고자 하는 사용자에게 안전하고 비판적인 댓글 환경을 제공합니다.
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **AI 댓글 분류**: 댓글을 정보 / 의견 / 질문 탭으로 분류하고, 디폴트 탭으로 정보 탭을 설정하여 사용자가 편향된 정보에 노출되지 않도록 합니다.
+- **의견 클러스터링**: 유사한 의견을 묶어 클러스터 단위로 시각화하여 어느 한쪽의 의견에 우선적으로 치우치지 않도록 합니다.
+- **댓글 트래픽 데이터 시각화**: 댓글 작성 시간대별 트래픽 데이터를 시각화하여 사용자에게 댓글 활동의 패턴을 제공합니다. 이를 통해 사용자는 어느 시간대에 어떤 댓글이 많이 작성되는지 파악하여 댓글 부대, 조작 댓글 등을 유의미하게 식별할 수 있습니다.
+- **조작 댓글 필터링**: 작성 시간 및 내용 기반으로 조작 가능성이 있는 댓글 자동 탐지 및 필터링 기능 제공
+- **다양한 반응 버튼 및 정렬 기능**: 유익해요 / 공감해요 / 더 알고싶어요 등
 
-```js
-export default tseslint.config({
-    extends: [
-        // Remove ...tseslint.configs.recommended and replace with this
-        ...tseslint.configs.recommendedTypeChecked,
-        // Alternatively, use this for stricter rules
-        ...tseslint.configs.strictTypeChecked,
-        // Optionally, add this for stylistic rules
-        ...tseslint.configs.stylisticTypeChecked,
-    ],
-    languageOptions: {
-        // other options...
-        parserOptions: {
-            project: ['./tsconfig.node.json', './tsconfig.app.json'],
-            tsconfigRootDir: import.meta.dirname,
-        },
-    },
-})
-```
+## AI 댓글 분류 관련
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+현재 백엔드 서버가 로컬에서 돌아가는 상황입니다. (재정 문제..)
+AI 레포를 클론 받은 후, 필요한 라이브러리를 설치하고, `run_server.py`를 실행하면 로컬로 서버가 열릴 텐데, 이를 통해 진행하시면 됩니다.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-    plugins: {
-        // Add the react-x and react-dom plugins
-        'react-x': reactX,
-        'react-dom': reactDom,
-    },
-    rules: {
-        // other rules...
-        // Enable its recommended typescript rules
-        ...reactX.configs['recommended-typescript'].rules,
-        ...reactDom.configs.recommended.rules,
-    },
-})
-```
+궁금하신 게 있으면 언제든지 seahn1021@snu.ac.kr 로 문의주세요!
