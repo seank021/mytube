@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react'
 import AuthPopover from './authPopover'
 import Toast from './toast'
+import Loader from './loader'
 import type { UserType } from '../types/users'
 import { checkHateAndTabCluster } from '../utils/checkHateAndTabCluster'
 
@@ -42,6 +43,8 @@ const CommentWriteForm: React.FC<CommentWriteFormProps> = ({
         message: string
         errorDetail?: string
     } | null>(null)
+    const [isLoading, setIsLoading] = useState(false)
+    const [loadingMessage, setLoadingMessage] = useState('')
 
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         if (!isUser) {
@@ -90,8 +93,16 @@ const CommentWriteForm: React.FC<CommentWriteFormProps> = ({
             return
         } else if (onAddComment) {
             // 상위 댓글 작성 시
+            setIsLoading(true)
+            setLoadingMessage(
+                `${user.name} 님의 ${text.slice(0, 10)}... 댓글을 AI가 분석하고 있습니다. 잠시만 기다려주세요.`,
+            )
             const hateAndTabClusterResult: [string, string[], string | null] | ['error'] =
                 await checkHateAndTabCluster(text)
+
+            setIsLoading(false)
+            setLoadingMessage('')
+
             if (hateAndTabClusterResult[0] === 'hate') {
                 setToast({
                     type: 'failure',
@@ -213,6 +224,14 @@ const CommentWriteForm: React.FC<CommentWriteFormProps> = ({
             {toast && (
                 <Toast type={toast.type} message={toast.message} errorDetail={toast.errorDetail} />
             )}
+
+            {/* Loading Indicator */}
+            {isLoading && (
+                <div className='absolute inset-0 flex items-center justify-center bg-white bg-opacity-50 z-10'>
+                    <Loader loadingMessage={loadingMessage} />
+                </div>
+            )}
+            <div className='absolute inset-0 bg-transparent pointer-events-none' />
         </div>
     )
 }

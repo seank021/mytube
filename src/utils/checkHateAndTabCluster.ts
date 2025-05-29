@@ -5,7 +5,7 @@ export const checkHateAndTabCluster = async (
     text: string,
 ): Promise<[string, string[], string | null] | ['error']> => {
     try {
-        console.log('checkHateAndTabCluster called with text:', text)
+        // console.log('checkHateAndTabCluster called with text:', text)
 
         const response = await fetch(API_URL, {
             method: 'POST',
