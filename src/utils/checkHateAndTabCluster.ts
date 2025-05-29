@@ -1,4 +1,5 @@
-// const API_URL = 'https://hci-aiml.onrender.com/classify'
+const isDEV = true
+const API_URL = isDEV ? 'http://127.0.0.1:3000/classify' : 'https://hci-aiml.onrender.com/classify'
 
 export const checkHateAndTabCluster = async (
     text: string,
@@ -6,30 +7,30 @@ export const checkHateAndTabCluster = async (
     try {
         console.log('checkHateAndTabCluster called with text:', text)
 
-        // 너무 느려서 일단 주석 처리
-        // const response = await fetch(API_URL, {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({ comment: text }),
-        // })
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ comment: text }),
+        })
 
-        // const result = await response.json()
+        const result = await response.json()
 
         // console.log('API response:', result)
 
-        // const hate = result?.hate.label
-        // const tab = result?.tab_cluster.tab
-        // const cluster = result?.tab_cluster.cluster
+        const hate = result?.hate.label
+        const tab = result?.tab_cluster.tab
+        const cluster = result?.tab_cluster.cluster
 
-        // if ('opinion' in tab && cluster === null) {
-        //     return [hate, tab, 'cluster_C'] // 중립으로 처리
-        // }
+        // tab에 opinion이 있는데, 클러스터 배정이 안 된 경우: 중립으로 처리
+        if (tab && tab.includes('opinion') && !cluster) {
+            return [hate, tab, 'cluster_C']
+        }
 
-        // return [hate, tab, cluster || null]
+        return [hate, tab, cluster || null]
 
-        return ['none-hate', ['information', 'opinion'], 'cluster_A'] // 임시로 하드코딩
+        // return ['none-hate', ['information', 'opinion'], 'cluster_A'] // 임시로 하드코딩
     } catch (err) {
         console.error('API 호출 중 오류:', err)
         return ['error']

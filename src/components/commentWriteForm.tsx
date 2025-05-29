@@ -109,6 +109,15 @@ const CommentWriteForm: React.FC<CommentWriteFormProps> = ({
                 })
                 setTimeout(() => setToast(null), 2000)
                 return
+            } else if (hateAndTabClusterResult[1] && hateAndTabClusterResult[1].length === 0) {
+                setToast({
+                    type: 'failure',
+                    message: '너무 짧거나 관계 없는 댓글입니다.',
+                    errorDetail: '댓글을 더 구체적으로 작성해주세요.',
+                })
+                setTimeout(() => setToast(null), 2000)
+                setText('')
+                return
             }
 
             // 'none-hate': tab, cluster
