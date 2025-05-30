@@ -2,6 +2,28 @@ import type { CommentType } from '../../../types/comments'
 
 export const COMMENT_DATA_OPINION: CommentType[] = [
     {
+        comment_id: 'UgzBQ4if6fyt4jGuIzt4AaABAg',
+        author_id: 'UCnt8FtX1JuBG_ykcc5IOPGw',
+        author_name: '@곽두팔-y2l',
+        author_profile_image:
+            'https://yt3.ggpht.com/AIpnLO-pnQs4D3znY2-Z-rkB37DjsMRc7Ewj_Ae_6tJQw78gS4YIuFlqQIlSi14PauOUsdciIw=s48-c-k-c0x00ffffff-no-rj',
+        timestamp: '2025-04-17T13:16:56Z',
+        content: '지나가던 09 고1 입니다 네, 마저 가겠습니다❤',
+        reactions: {
+            useful: 96,
+            agree: 49,
+            curious: 94,
+            creative: 2,
+            disagree: 57,
+        },
+        time_taken_to_write: 986,
+        tab: ['opinion'],
+        cluster: 'cluster_C',
+        manipulated: false,
+        reply_ids: [],
+        replies: [],
+    },
+    {
         comment_id: 'UgxtZl9JsSed58OHI9J4AaABAg',
         author_id: 'UCri3fDBIU0kfWh1pS08ZkIw',
         author_name: '@rladPdlf-u6f',
