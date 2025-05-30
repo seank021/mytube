@@ -15,7 +15,7 @@ const Header: React.FC = () => {
     const isUser: boolean = localStorage.getItem('isUser') === 'true'
 
     return (
-        <header className='flex w-full items-center justify-between px-16 py-6'>
+        <header className='fixed top-0 left-0 w-full z-50 bg-white flex items-center justify-between px-16 py-6'>
             {/* Logo */}
             <h1
                 className='text-3xl font-bold text-[#4F46E5] cursor-pointer'
