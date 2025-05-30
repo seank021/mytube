@@ -7,7 +7,7 @@ const Toast: React.FC<{
     errorDetail?: string
 }> = ({ type, message, errorDetail }) => {
     return createPortal(
-        <div className='fixed bottom-10 right-10 px-5 py-4 rounded-xl shadow-xl max-w-xs w-full z-50 transition-all bg-white border-1 border-zinc-500'>
+        <div className='fixed bottom-10 right-10 px-5 py-4 rounded-xl shadow-xl max-w-sm w-full z-50 transition-all bg-white border-1 border-zinc-500'>
             <div className='flex flex-col items-start justify-center gap-1'>
                 <div className='flex gap-2 items-center justify-center'>
                     <img

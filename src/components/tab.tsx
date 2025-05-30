@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 const Tab: React.FC<{
     tab: string | null
@@ -9,6 +9,20 @@ const Tab: React.FC<{
         { key: 'opinion', label: '의견' },
         { key: 'question', label: '질문' },
     ]
+
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Tab') {
+                e.preventDefault() // 기본 탭 이동 막기
+                const currentIndex = tabs.findIndex((t) => t.key === tab)
+                const nextIndex = (currentIndex + 1) % tabs.length
+                setTab(tabs[nextIndex].key)
+            }
+        }
+
+        window.addEventListener('keydown', handleKeyDown)
+        return () => window.removeEventListener('keydown', handleKeyDown)
+    }, [tab, setTab])
 
     return (
         <div className='flex items-center self-start gap-2 border border-zinc-200 rounded-md p-1 bg-white'>
