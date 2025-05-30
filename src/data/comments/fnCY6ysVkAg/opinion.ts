@@ -1,4 +1,4 @@
-import type { CommentType } from "../../../types/comments";
+import type { CommentType } from '../../../types/comments'
 
 export const COMMENT_DATA_OPINION: CommentType[] = [
     {
@@ -3343,8 +3343,7 @@ export const COMMENT_DATA_OPINION: CommentType[] = [
                 author_profile_image:
                     'https://yt3.ggpht.com/ytc/AIdro_lSynSsnbxa6K3xHEBF5o2o3yD0Jbr7VqCdi7YrgkHmrEGbU6D7kr6OYjlEo8YUuArqmEw=s48-c-k-c0x00ffffff-no-rj',
                 timestamp: '2025-04-29T09:12:27Z',
-                content:
-                    '​@@kjh-r3y실수 한 번 하면 1년이 날아가는 것보단 뭐든 낫지... ㅋㅋ 아재',
+                content: '​@@kjh-r3y실수 한 번 하면 1년이 날아가는 것보단 뭐든 낫지... ㅋㅋ 아재',
                 reactions: {
                     useful: 68,
                     agree: 6,
@@ -9480,8 +9479,7 @@ export const COMMENT_DATA_OPINION: CommentType[] = [
                 author_profile_image:
                     'https://yt3.ggpht.com/ytc/AIdro_lqZZRWVeH6XqGcG2ZzeqBwu4JEmbDI7YNnRMhtqBHk1FvxA0I=s48-c-k-c0x00ffffff-no-rj',
                 timestamp: '2025-04-29T19:10:51Z',
-                content:
-                    '​@이현석-w7f 수능식 영어로 말하거나 쓰면 F학점 받는다',
+                content: '​@이현석-w7f 수능식 영어로 말하거나 쓰면 F학점 받는다',
                 reactions: {
                     useful: 9,
                     agree: 48,
@@ -13581,7 +13579,8 @@ export const COMMENT_DATA_OPINION: CommentType[] = [
         author_name: '@author_A1',
         author_profile_image: '',
         timestamp: '2025-05-11T18:00:00Z',
-        content: '자유전공학부는 학생들이 전공을 자유롭게 선택할 수 있는 제도입니다. 이 제도가 도입되면 학생들은 자신의 관심사와 적성에 맞는 전공을 선택할 수 있게 됩니다. 이는 학생들의 학습 동기를 높이고, 다양한 분야에 대한 탐구를 촉진할 것으로 기대됩니다.',
+        content:
+            '자유전공학부는 학생들이 전공을 자유롭게 선택할 수 있는 제도입니다. 이 제도가 도입되면 학생들은 자신의 관심사와 적성에 맞는 전공을 선택할 수 있게 됩니다. 이는 학생들의 학습 동기를 높이고, 다양한 분야에 대한 탐구를 촉진할 것으로 기대됩니다.',
         reactions: {
             useful: 45,
             agree: 60,
@@ -13601,7 +13600,8 @@ export const COMMENT_DATA_OPINION: CommentType[] = [
                 author_name: '@replyUser_1',
                 author_profile_image: '',
                 timestamp: '2025-05-11T18:05:00Z',
-                content: '이런 제도가 학생들에게 긍정적인 영향을 미칠 것 같아요. 다양한 전공을 경험할 수 있는 기회가 늘어나니까요.',
+                content:
+                    '이런 제도가 학생들에게 긍정적인 영향을 미칠 것 같아요. 다양한 전공을 경험할 수 있는 기회가 늘어나니까요.',
                 reactions: {
                     useful: 20,
                     agree: 25,
@@ -13618,7 +13618,8 @@ export const COMMENT_DATA_OPINION: CommentType[] = [
                 author_name: '@replyUser_2',
                 author_profile_image: '',
                 timestamp: '2025-05-11T18:10:00Z',
-                content: '하지만, 자유전공학부가 도입되면 학생들이 전공 선택에 어려움을 겪을 수도 있습니다. 전공 선택에 대한 충분한 정보와 지원이 필요할 것 같습니다.',
+                content:
+                    '하지만, 자유전공학부가 도입되면 학생들이 전공 선택에 어려움을 겪을 수도 있습니다. 전공 선택에 대한 충분한 정보와 지원이 필요할 것 같습니다.',
                 reactions: {
                     useful: 15,
                     agree: 10,
@@ -14172,27 +14173,25 @@ export const COMMENT_DATA_OPINION: CommentType[] = [
         ],
     },
     {
-        "comment_id": "UgzBQ4if6fyt4jGuIzt4AaABAg",
-        "author_id": "UCnt8FtX1JuBG_ykcc5IOPGw",
-        "author_name": "@곽두팔-y2l",
-        "author_profile_image": "https://yt3.ggpht.com/AIpnLO-pnQs4D3znY2-Z-rkB37DjsMRc7Ewj_Ae_6tJQw78gS4YIuFlqQIlSi14PauOUsdciIw=s48-c-k-c0x00ffffff-no-rj",
-        "timestamp": "2025-05-12T13:16:56Z",
-        "content": "지나가던 09 고1 입니다 네, 마저 가겠습니다❤",
-        "reactions": {
-            "useful": 96,
-            "agree": 49,
-            "curious": 94,
-            "creative": 2,
-            "disagree": 57
+        comment_id: 'UgzBQ4if6fyt4jGuIzt4AaABAg',
+        author_id: 'UCnt8FtX1JuBG_ykcc5IOPGw',
+        author_name: '@곽두팔-y2l',
+        author_profile_image:
+            'https://yt3.ggpht.com/AIpnLO-pnQs4D3znY2-Z-rkB37DjsMRc7Ewj_Ae_6tJQw78gS4YIuFlqQIlSi14PauOUsdciIw=s48-c-k-c0x00ffffff-no-rj',
+        timestamp: '2025-05-12T13:16:56Z',
+        content: '지나가던 09 고1 입니다 네, 마저 가겠습니다❤',
+        reactions: {
+            useful: 96,
+            agree: 49,
+            curious: 94,
+            creative: 2,
+            disagree: 57,
         },
-        "time_taken_to_write": 986,
-        "tab": [
-            "opinion"
-        ],
-        "cluster": 'cluster_A',
-        "manipulated": false,
-        "reply_ids": [],
-        "replies": []
-    }
-
+        time_taken_to_write: 986,
+        tab: ['opinion'],
+        cluster: 'cluster_A',
+        manipulated: false,
+        reply_ids: [],
+        replies: [],
+    },
 ]
