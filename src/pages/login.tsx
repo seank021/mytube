@@ -81,27 +81,28 @@ const Login: React.FC = () => {
                     <p className='text-sm text-zinc-500 mb-4'>
                         MyTube에 로그인하고 당신의 의견을 정리해보세요.
                     </p>
-
-                    <input
-                        type='text'
-                        placeholder='아이디를 입력하세요.'
-                        className='px-3 py-2 border text-sm border-zinc-200 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400'
-                        value={id}
-                        onChange={(e) => setId(e.target.value)}
-                    />
-                    <input
-                        type='password'
-                        placeholder='비밀번호를 입력하세요.'
-                        className='px-3 py-2 border text-sm border-zinc-200 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400'
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                    <button
-                        className='w-full bg-[#4F46E5] text-zinc-50 py-2 rounded-md font-medium text-sm hover:bg-[#4338CA] transition-colors'
-                        onClick={onClickLogin}
-                    >
-                        로그인
-                    </button>
+                    <form className='flex flex-col gap-3' onSubmit={(e) => e.preventDefault()}>
+                        <input
+                            type='text'
+                            placeholder='아이디를 입력하세요.'
+                            className='px-3 py-2 border text-sm border-zinc-200 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400'
+                            value={id}
+                            onChange={(e) => setId(e.target.value)}
+                        />
+                        <input
+                            type='password'
+                            placeholder='비밀번호를 입력하세요.'
+                            className='px-3 py-2 border text-sm border-zinc-200 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400'
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                        <button
+                            className='w-full bg-[#4F46E5] text-zinc-50 py-2 rounded-md font-medium text-sm hover:bg-[#4338CA] transition-colors'
+                            onClick={onClickLogin}
+                        >
+                            로그인
+                        </button>
+                    </form>
 
                     <div className='flex items-center gap-2 text-zinc-500 text-xs my-4'>
                         <div className='flex-1 h-px bg-zinc-200' />
