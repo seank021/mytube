@@ -21,7 +21,7 @@ const SortBox: React.FC<SortBoxProps> = ({ sortKey, setSortKey }) => {
     const selectedLabel = sortOptions.find((o) => o.key === sortKey)?.label ?? ''
 
     return (
-        <div className='relative inline-block text-left w-[160px]'>
+        <div className='relative inline-block text-left w-[180px]'>
             <button
                 onClick={() => setOpen((prev) => !prev)}
                 className='flex justify-between items-center w-full px-4 py-[6px] border border-zinc-200 rounded-md bg-white text-sm shadow-sm hover:bg-zinc-50'
