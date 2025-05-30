@@ -1,9 +1,15 @@
 const isDEV = true
 const API_URL = isDEV ? 'http://127.0.0.1:3000/classify' : 'https://hci-aiml.onrender.com/classify'
+const useDummy = true
 
 export const checkHateAndTabCluster = async (
     text: string,
 ): Promise<[string, string[], string | null] | ['error']> => {
+    if (useDummy) {
+        console.log('Using dummy data for checkHateAndTabCluster')
+        return ['none-hate', ['information', 'opinion'], 'cluster_A'] // 임시로 하드코딩
+    }
+
     try {
         // console.log('checkHateAndTabCluster called with text:', text)
 
@@ -16,7 +22,6 @@ export const checkHateAndTabCluster = async (
         })
 
         const result = await response.json()
-
         // console.log('API response:', result)
 
         const hate = result?.hate.label
@@ -29,8 +34,6 @@ export const checkHateAndTabCluster = async (
         }
 
         return [hate, tab, cluster || null]
-
-        // return ['none-hate', ['information', 'opinion'], 'cluster_A'] // 임시로 하드코딩
     } catch (err) {
         console.error('API 호출 중 오류:', err)
         return ['error']
