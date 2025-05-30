@@ -5934,7 +5934,7 @@ export const COMMENT_DATA_OPINION: CommentType[] = [
             'https://yt3.ggpht.com/ytc/AIdro_lfb-pcGYZj0gg0d930AgEhjE93DJcoyglTyJsiF1U=s48-c-k-c0x00ffffff-no-rj',
         timestamp: '2025-04-29T10:58:02Z',
         content:
-            '와 ㅅㅂ 내가 5년전부터 댓글달고 레포트 과제에도 글쓰고 다니던건데\n국영수위주가 아닌 철학,인문학 소양교육의 비중을 늘리고 청소년기를 적성탐색의 시기로 삼아야하는데\n\n도대체 교육정책을 언제 개혁하나 싶었는데 서울대교수들이 내 오랜 생각이랑 똑같은 제안을 드디어 발표했다는 것에 소름돋았다',
+            '와 내가 5년전부터 댓글달고 레포트 과제에도 글쓰고 다니던건데\n국영수위주가 아닌 철학,인문학 소양교육의 비중을 늘리고 청소년기를 적성탐색의 시기로 삼아야하는데\n\n도대체 교육정책을 언제 개혁하나 싶었는데 서울대교수들이 내 오랜 생각이랑 똑같은 제안을 드디어 발표했다는 것에 소름돋았다',
         reactions: {
             useful: 35,
             agree: 41,
@@ -13697,9 +13697,9 @@ export const COMMENT_DATA_OPINION: CommentType[] = [
         replies: [],
     },
     {
-        comment_id: 'opinion_A3',
-        author_id: 'author_A3',
-        author_name: '@author_A3',
+        comment_id: 'opinion_A4',
+        author_id: 'author_A4',
+        author_name: '@author_A4',
         author_profile_image: '',
         timestamp: '2025-05-11T18:20:00Z',
         content: '완전 좋은듯? 내 프로필처럼',
