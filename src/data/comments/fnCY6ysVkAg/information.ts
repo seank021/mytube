@@ -937,7 +937,7 @@ export const COMMENT_DATA_INFO: CommentType[] = [
                 author_id: 'UCct8x8sbmcKCASuisTRIueQ',
                 author_name: '@squaresugar',
                 author_profile_image:
-                    'https://yt3.ggpht.com/IwkEZkjvHj4CjMXiLP8j1QXoZz5EjmWM5bPbyJQGgHdC5qR8vZ1rJ1db9tRJ4AbD1uAACeAp5Q=s48-c-k-c0x00ffffff-no-rj',
+                    '',
                 timestamp: '2025-04-27T23:11:34Z',
                 content:
                     '작년에 고3이였던 사람인데 진로 바껴도 학종으로 잘 가더라구요~!! 걱정 마시길',
