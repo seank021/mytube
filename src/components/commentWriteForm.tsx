@@ -60,7 +60,7 @@ const CommentWriteForm: React.FC<CommentWriteFormProps> = ({
                 type: 'failure',
                 message: '댓글 내용을 작성해주세요.',
             })
-            setTimeout(() => setToast(null), 1500)
+            setTimeout(() => setToast(null), 3000)
             return
         }
 
@@ -109,7 +109,7 @@ const CommentWriteForm: React.FC<CommentWriteFormProps> = ({
                     message: '악성 댓글로 감지되어 등록이 제한됩니다.',
                     errorDetail: '부적절한 내용을 제거 후 다시 시도해주세요.',
                 })
-                setTimeout(() => setToast(null), 2000)
+                setTimeout(() => setToast(null), 4000)
                 setText('')
                 return
             } else if (hateAndTabClusterResult[0] === 'error') {
@@ -118,7 +118,7 @@ const CommentWriteForm: React.FC<CommentWriteFormProps> = ({
                     message: '댓글 등록 중 오류가 발생했습니다.',
                     errorDetail: '서버와의 통신에 실패했습니다. 잠시 후 다시 시도해주세요.',
                 })
-                setTimeout(() => setToast(null), 2000)
+                setTimeout(() => setToast(null), 4000)
                 return
             } else if (hateAndTabClusterResult[1] && hateAndTabClusterResult[1].length === 0) {
                 setToast({
@@ -126,7 +126,7 @@ const CommentWriteForm: React.FC<CommentWriteFormProps> = ({
                     message: '너무 짧거나 관계 없는 댓글입니다.',
                     errorDetail: '댓글을 더 구체적으로 작성해주세요.',
                 })
-                setTimeout(() => setToast(null), 2000)
+                setTimeout(() => setToast(null), 4000)
                 setText('')
                 return
             }
@@ -171,7 +171,7 @@ const CommentWriteForm: React.FC<CommentWriteFormProps> = ({
                 type: 'success',
                 message: `댓글이 ${tabLabels} 탭에 등록되었습니다.`,
             })
-            setTimeout(() => setToast(null), 1500)
+            setTimeout(() => setToast(null), 4000)
             setText('')
         }
     }

@@ -124,12 +124,21 @@ const Comment: React.FC<CommentProps> = ({
 
     const handleReportSubmit = (reason: string[], commentID: string) => {
         console.log(`신고 사유: ${reason.join(', ')}, 댓글 ID: ${commentID}`)
+        if (reason.length === 0) {
+            setToast({
+                type: 'failure',
+                message: '신고 사유를 선택해주세요.',
+                errorDetail: '신고 사유가 선택되지 않았습니다.',
+            })
+            setTimeout(() => setToast(null), 3000)
+            return
+        }
         setShowReport(false)
         setToast({
             type: 'success',
             message: '신고가 성공적으로 이루어졌습니다.\n신고하신 댓글은 숨겨집니다.',
         })
-        setTimeout(() => setToast(null), 1500)
+        setTimeout(() => setToast(null), 3000)
         setIsReported(true)
     }
 
@@ -316,7 +325,7 @@ const Comment: React.FC<CommentProps> = ({
                         }}
                         onSuccessWithMessage={(msg) => {
                             setToast({ type: 'success', message: msg })
-                            setTimeout(() => setToast(null), 1500)
+                            setTimeout(() => setToast(null), 2500)
                         }}
                     />
                 </div>
@@ -338,7 +347,7 @@ const Comment: React.FC<CommentProps> = ({
                             }}
                             onSuccessWithMessage={(msg) => {
                                 setToast({ type: 'success', message: msg })
-                                setTimeout(() => setToast(null), 1500)
+                                setTimeout(() => setToast(null), 2500)
                             }}
                         />
                     </div>

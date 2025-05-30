@@ -17,7 +17,7 @@ const Login: React.FC = () => {
             setTimeout(() => {
                 setToast(null)
                 window.location.href = '/'
-            }, 500)
+            }, 1000)
         } else {
             setToast({
                 type: 'failure',
@@ -26,7 +26,7 @@ const Login: React.FC = () => {
             })
             setTimeout(() => {
                 setToast(null)
-            }, 3000)
+            }, 4000)
         }
     }
 
@@ -38,7 +38,7 @@ const Login: React.FC = () => {
         })
         setTimeout(() => {
             setToast(null)
-        }, 3000)
+        }, 4000)
     }
 
     const onClickSignUp = () => {
@@ -49,7 +49,7 @@ const Login: React.FC = () => {
         })
         setTimeout(() => {
             setToast(null)
-        }, 3000)
+        }, 4000)
     }
 
     return (
