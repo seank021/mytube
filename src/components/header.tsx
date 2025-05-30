@@ -49,7 +49,7 @@ const Header: React.FC = () => {
                     />
                     {/* Logout Button */}
                     <button
-                        className='text-sm px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors'
+                        className='text-sm px-4 py-2 border-[#4F46E5] border text-[#4F46E5] rounded-md hover:bg-[#E0E7FF] transition-colors'
                         onClick={onClickLogout}
                     >
                         로그아웃
