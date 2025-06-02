@@ -33,13 +33,13 @@ const Drawer: React.FC<Props> = ({ open, onClose, children }) => {
         >
             <div
                 className={cn(
-                    'fixed p-10 right-0 top-0 h-full bg-white shadow-xl transition-transform duration-300 ease-in-out overflow-y-auto',
+                    'fixed px-10 pb-20 right-0 top-0 h-full bg-white shadow-xl transition-transform duration-300 ease-in-out overflow-y-auto',
                     isVisible ? 'translate-x-0' : 'translate-x-full',
                 )}
                 style={{ width: '65%' }}
                 onClick={(e) => e.stopPropagation()}
             >
-                <div className='flex items-center justify-between mb-5'>
+                <div className='flex items-center justify-between pt-10'>
                     <div className='flex flex-col gap-2'>
                         <p className='text-2xl font-semibold'>의견 모아보기</p>
                         <span className='text-gray-500 text-sm'>

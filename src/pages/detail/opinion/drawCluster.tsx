@@ -58,21 +58,23 @@ const DrawCluster: React.FC<DrawerClusterProps> = ({
         <>
             <Drawer open={!!selectedClusterId} onClose={() => setSelectedClusterId(null)}>
                 <div className='flex flex-col gap-5 w-full'>
-                    {/* Cluster Selection */}
-                    <div className='flex items-center gap-3'>
-                        {clusters.map((cluster) => (
-                            <button
-                                key={cluster.id}
-                                className={`px-4 py-2 rounded-lg text-base font-medium ${
-                                    selectedClusterId === cluster.id
-                                        ? 'bg-[#4F46E5] text-white'
-                                        : 'border-[#4F46E5] border text-[#4F46E5]'
-                                }`}
-                                onClick={() => setSelectedClusterId(cluster.id)}
-                            >
-                                {cluster.name}
-                            </button>
-                        ))}
+                    <div className='flex items-center sticky top-0 z-10 bg-white h-[80px]'>
+                        {/* Cluster Selection */}
+                        <div className='flex items-center gap-3 flex-wrap'>
+                            {clusters.map((cluster) => (
+                                <button
+                                    key={cluster.id}
+                                    className={`px-4 py-2 rounded-lg text-base font-medium ${
+                                        selectedClusterId === cluster.id
+                                            ? 'bg-[#4F46E5] text-white'
+                                            : 'border-[#4F46E5] border text-[#4F46E5]'
+                                    }`}
+                                    onClick={() => setSelectedClusterId(cluster.id)}
+                                >
+                                    {cluster.name}
+                                </button>
+                            ))}
+                        </div>
                     </div>
 
                     {/* Graph */}
@@ -108,15 +110,19 @@ const DrawCluster: React.FC<DrawerClusterProps> = ({
                     </div>
 
                     {/* Cluster Information */}
-                    <div className='w-full flex justify-between items-center'>
-                        <span className='text-base font-semibold'>의견 {comments.length}개</span>
-                        <div className='flex items-center gap-4'>
-                            <Filter
-                                label='조작 댓글 필터링 켜기'
-                                filterValue={onlyWithNonManipulated}
-                                setFilterValue={setOnlyWithNonManipulated}
-                            />
-                            <SortBox sortKey={sortKey} setSortKey={setSortKey} />
+                    <div className='sticky top-[80px] z-10 bg-white pb-5 border-b border-zinc-200'>
+                        <div className='w-full flex justify-between items-center'>
+                            <span className='text-base font-semibold'>
+                                의견 {comments.length}개
+                            </span>
+                            <div className='flex items-center gap-4'>
+                                <Filter
+                                    label='조작 댓글 필터링 켜기'
+                                    filterValue={onlyWithNonManipulated}
+                                    setFilterValue={setOnlyWithNonManipulated}
+                                />
+                                <SortBox sortKey={sortKey} setSortKey={setSortKey} />
+                            </div>
                         </div>
                     </div>
 

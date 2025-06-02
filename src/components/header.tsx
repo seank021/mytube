@@ -15,7 +15,7 @@ const Header: React.FC = () => {
     const isUser: boolean = localStorage.getItem('isUser') === 'true'
 
     return (
-        <header className='fixed top-0 left-0 w-full z-50 bg-white flex items-center justify-between px-16 py-6'>
+        <header className='flex w-full items-center justify-between px-16 py-6'>
             {/* Logo */}
             <h1
                 className='text-3xl font-bold text-[#4F46E5] cursor-pointer'
@@ -25,7 +25,7 @@ const Header: React.FC = () => {
             </h1>
 
             {/* Search Bar */}
-            <div className='flex items-center bg-zinc-200 rounded-full px-4 w-[600px]'>
+            <div className='flex items-center bg-zinc-200 rounded-full px-4 max-w-[45dvw] w-full'>
                 <img src='/icons/search.svg' alt='검색' className='w-5 h-5 mr-2' />
                 <input
                     type='text'

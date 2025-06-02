@@ -35,6 +35,7 @@ export type CommentType = {
     cluster?: string | null
     reply_ids?: string[]
     replies?: ReplyType[]
+    isMine?: boolean
 }
 
 // 전체 댓글 데이터

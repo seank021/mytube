@@ -13,7 +13,6 @@ const AppRoutes: React.FC = () => {
     return (
         <>
             {!hideHeader && <Header />}
-            {!hideHeader && <div className='h-[88px]' />}
             <Routes>
                 <Route path='/' element={<Home />} />
                 <Route path='/login' element={!isUser ? <Login /> : <Navigate to='/' />} />

@@ -14,6 +14,8 @@ import { CLUSTERS } from '../../data/clusters/fnCY6ysVkAg/cluster'
 import { TEST_USER } from '../../data/users/test'
 import { VIDEOS } from '../../data/videos/videos'
 import Question from './question'
+import SortBox from '../../components/sortBox'
+import Filter from '../../components/filter'
 
 const Detail: React.FC = () => {
     const { videoId } = useParams<{ videoId: string }>()
@@ -56,6 +58,7 @@ const Detail: React.FC = () => {
 
     const handleAddComment: AddCommentType = (newComment, tabs, clusterId) => {
         if ('parentCommentId' in newComment) {
+            // 대댓글인 경우
             setCommentsByTab((prev) => {
                 const updated = { ...prev }
                 for (const key in updated) {
@@ -72,6 +75,7 @@ const Detail: React.FC = () => {
                 return updated
             })
         } else {
+            // 상위 댓글인 경우
             const commentWithMeta = {
                 ...newComment,
                 tab: tabs,
@@ -83,18 +87,39 @@ const Detail: React.FC = () => {
             setCommentsByTab((prev) => {
                 const updated = { ...prev }
                 tabs?.forEach((t) => {
-                    updated[t] = [commentWithMeta, ...(updated[t] || [])]
+                    updated[t] = [
+                        {
+                            ...commentWithMeta,
+                            isMine: true,
+                        },
+                        ...(updated[t]?.map((c) => ({
+                            ...c,
+                            isMine: c.author_id === TEST_USER.id, // Assuming TEST_USER is the current user
+                        })) || []),
+                    ]
                 })
                 return updated
             })
         }
     }
 
+    const sortWithMineFirst = (comments: CommentType[], sortKey: SortKey) => {
+        const sorted =
+            sortKey === 'latest'
+                ? comments.sort(
+                      (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
+                  )
+                : comments.sort(
+                      (a, b) => (b.reactions?.[sortKey] || 0) - (a.reactions?.[sortKey] || 0),
+                  )
+
+        const myComments = sorted.filter((c) => c.isMine)
+        const others = sorted.filter((c) => !c.isMine)
+        return [...myComments, ...others]
+    }
+
     const sortedComments = useMemo(() => {
-        const base = [...comments]
-        return sortKey === 'latest'
-            ? base.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
-            : base.sort((a, b) => (b.reactions?.[sortKey] || 0) - (a.reactions?.[sortKey] || 0))
+        return sortWithMineFirst([...comments], sortKey)
     }, [comments, sortKey])
 
     const filteredCommentsWithReplies = useMemo(() => {
@@ -102,9 +127,7 @@ const Detail: React.FC = () => {
             const hasReplies = comment.replies && comment.replies.length > 0
             return onlyWithReplies ? hasReplies : true
         })
-        return sortKey === 'latest'
-            ? base.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
-            : base.sort((a, b) => (b.reactions?.[sortKey] || 0) - (a.reactions?.[sortKey] || 0))
+        return sortWithMineFirst(base, sortKey)
     }, [comments, sortKey, onlyWithReplies])
 
     const filteredCommentsByCluster = useMemo(() => {
@@ -127,16 +150,7 @@ const Detail: React.FC = () => {
                 }
             })
 
-        const sorted =
-            sortKey === 'latest'
-                ? filtered.sort(
-                      (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
-                  )
-                : filtered.sort(
-                      (a, b) => (b.reactions?.[sortKey] || 0) - (a.reactions?.[sortKey] || 0),
-                  )
-
-        return sorted
+        return sortWithMineFirst(filtered, sortKey)
     }, [selectedClusterId, onlyWithNonManipulated, sortKey, comments])
 
     const graphData = useMemo(() => {
@@ -161,9 +175,9 @@ const Detail: React.FC = () => {
     }, [selectedClusterId, onlyWithNonManipulated, comments])
 
     return (
-        <main className='flex flex-col gap-10 items-center justify-center'>
+        <main className='flex flex-col items-center justify-center'>
             {/* Video Section */}
-            <div className='w-full flex flex-col gap-2 mt-5'>
+            <div className='w-full flex flex-col gap-2 mt-5 mb-10'>
                 <div className='w-full aspect-video rounded-xl overflow-hidden'>
                     <iframe
                         width='100%'
@@ -187,17 +201,58 @@ const Detail: React.FC = () => {
                 onAddComment={handleAddComment}
             />
 
-            {/* Tab Section */}
-            <Tab tab={tab} setTab={setTab} />
+            <div className='sticky mt-5 mb-7 py-5 top-0 bg-white z-10 w-full flex flex-col gap-5 border-b border-zinc-200'>
+                {/* Tab Section */}
+                <Tab tab={tab} setTab={setTab} />
+
+                {/* Count, Filter, and Sort Section */}
+                {tab === 'information' && (
+                    <div className='w-full flex justify-between items-center'>
+                        <span className='text-base font-semibold'>
+                            정보성 댓글 {sortedComments.length}개
+                        </span>
+                        <SortBox sortKey={sortKey} setSortKey={setSortKey} />
+                    </div>
+                )}
+
+                {tab === 'opinion' && (
+                    <div className='w-full flex justify-between items-center'>
+                        <div className='flex flex-col gap-1'>
+                            <span className='text-base font-semibold'>
+                                의견 클러스터 {CLUSTERS.length}개
+                            </span>
+                            <span className='text-zinc-500 text-sm'>
+                                편향 방지를 위해 AI가 유사한 의견들을 모아서 무작위로 보여드려요.
+                            </span>
+                        </div>
+                        <Filter
+                            label='조작 댓글 필터링 켜기'
+                            filterValue={onlyWithNonManipulated}
+                            setFilterValue={setOnlyWithNonManipulated}
+                        />
+                    </div>
+                )}
+
+                {tab === 'question' && (
+                    <div className='w-full flex justify-between items-center'>
+                        <span className='text-base font-semibold'>
+                            질문 {filteredCommentsWithReplies.length}개
+                        </span>
+                        <div className='flex items-center gap-4'>
+                            <Filter
+                                label='대댓글 달린 댓글만 보기'
+                                filterValue={onlyWithReplies}
+                                setFilterValue={setOnlyWithReplies}
+                            />
+                            <SortBox sortKey={sortKey} setSortKey={setSortKey} />
+                        </div>
+                    </div>
+                )}
+            </div>
 
             {/* Comments Section */}
             {tab === 'information' && (
-                <Information
-                    comments={sortedComments}
-                    sortKey={sortKey}
-                    setSortKey={setSortKey}
-                    handleAddComment={handleAddComment}
-                />
+                <Information comments={sortedComments} handleAddComment={handleAddComment} />
             )}
 
             {tab === 'opinion' && (
@@ -205,7 +260,6 @@ const Detail: React.FC = () => {
                     <Cluster
                         clusters={CLUSTERS}
                         filterValue={onlyWithNonManipulated}
-                        setFilterValue={setOnlyWithNonManipulated}
                         onClickCluster={(clusterId) => setSelectedClusterId(clusterId)}
                         comments={comments}
                     />
@@ -227,10 +281,6 @@ const Detail: React.FC = () => {
             {tab === 'question' && (
                 <Question
                     comments={filteredCommentsWithReplies}
-                    filterValue={onlyWithReplies}
-                    setFilterValue={setOnlyWithReplies}
-                    sortKey={sortKey}
-                    setSortKey={setSortKey}
                     handleAddComment={handleAddComment}
                 />
             )}
