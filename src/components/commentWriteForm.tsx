@@ -150,6 +150,7 @@ const CommentWriteForm: React.FC<CommentWriteFormProps> = ({
                 manipulated: false,
                 tab: hateAndTabClusterResult[1],
                 cluster: hateAndTabClusterResult[2] || null,
+                isMine: true,
             }
 
             onAddComment(

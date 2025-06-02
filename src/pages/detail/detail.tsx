@@ -58,6 +58,7 @@ const Detail: React.FC = () => {
 
     const handleAddComment: AddCommentType = (newComment, tabs, clusterId) => {
         if ('parentCommentId' in newComment) {
+            // 대댓글인 경우
             setCommentsByTab((prev) => {
                 const updated = { ...prev }
                 for (const key in updated) {
@@ -74,6 +75,7 @@ const Detail: React.FC = () => {
                 return updated
             })
         } else {
+            // 상위 댓글인 경우
             const commentWithMeta = {
                 ...newComment,
                 tab: tabs,
@@ -85,18 +87,39 @@ const Detail: React.FC = () => {
             setCommentsByTab((prev) => {
                 const updated = { ...prev }
                 tabs?.forEach((t) => {
-                    updated[t] = [commentWithMeta, ...(updated[t] || [])]
+                    updated[t] = [
+                        {
+                            ...commentWithMeta,
+                            isMine: true,
+                        },
+                        ...(updated[t]?.map((c) => ({
+                            ...c,
+                            isMine: c.author_id === TEST_USER.id, // Assuming TEST_USER is the current user
+                        })) || []),
+                    ]
                 })
                 return updated
             })
         }
     }
 
+    const sortWithMineFirst = (comments: CommentType[], sortKey: SortKey) => {
+        const sorted =
+            sortKey === 'latest'
+                ? comments.sort(
+                      (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
+                  )
+                : comments.sort(
+                      (a, b) => (b.reactions?.[sortKey] || 0) - (a.reactions?.[sortKey] || 0),
+                  )
+
+        const myComments = sorted.filter((c) => c.isMine)
+        const others = sorted.filter((c) => !c.isMine)
+        return [...myComments, ...others]
+    }
+
     const sortedComments = useMemo(() => {
-        const base = [...comments]
-        return sortKey === 'latest'
-            ? base.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
-            : base.sort((a, b) => (b.reactions?.[sortKey] || 0) - (a.reactions?.[sortKey] || 0))
+        return sortWithMineFirst([...comments], sortKey)
     }, [comments, sortKey])
 
     const filteredCommentsWithReplies = useMemo(() => {
@@ -104,9 +127,7 @@ const Detail: React.FC = () => {
             const hasReplies = comment.replies && comment.replies.length > 0
             return onlyWithReplies ? hasReplies : true
         })
-        return sortKey === 'latest'
-            ? base.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
-            : base.sort((a, b) => (b.reactions?.[sortKey] || 0) - (a.reactions?.[sortKey] || 0))
+        return sortWithMineFirst(base, sortKey)
     }, [comments, sortKey, onlyWithReplies])
 
     const filteredCommentsByCluster = useMemo(() => {
@@ -129,16 +150,7 @@ const Detail: React.FC = () => {
                 }
             })
 
-        const sorted =
-            sortKey === 'latest'
-                ? filtered.sort(
-                      (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
-                  )
-                : filtered.sort(
-                      (a, b) => (b.reactions?.[sortKey] || 0) - (a.reactions?.[sortKey] || 0),
-                  )
-
-        return sorted
+        return sortWithMineFirst(filtered, sortKey)
     }, [selectedClusterId, onlyWithNonManipulated, sortKey, comments])
 
     const graphData = useMemo(() => {

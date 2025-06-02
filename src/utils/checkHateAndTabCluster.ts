@@ -7,7 +7,7 @@ export const checkHateAndTabCluster = async (
 ): Promise<[string, string[], string | null] | ['error']> => {
     if (useDummy) {
         console.log('Using dummy data for checkHateAndTabCluster')
-        return ['none-hate', ['information', 'opinion'], 'cluster_A'] // 임시로 하드코딩
+        return ['none-hate', ['information', 'opinion', 'question'], 'cluster_A'] // 임시로 하드코딩
     }
 
     try {
