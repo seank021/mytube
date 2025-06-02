@@ -14,6 +14,8 @@ import { CLUSTERS } from '../../data/clusters/fnCY6ysVkAg/cluster'
 import { TEST_USER } from '../../data/users/test'
 import { VIDEOS } from '../../data/videos/videos'
 import Question from './question'
+import SortBox from '../../components/sortBox'
+import Filter from '../../components/filter'
 
 const Detail: React.FC = () => {
     const { videoId } = useParams<{ videoId: string }>()
@@ -190,14 +192,53 @@ const Detail: React.FC = () => {
             {/* Tab Section */}
             <Tab tab={tab} setTab={setTab} />
 
+            {/* Count, Filter, and Sort Section */}
+            {tab === 'information' && (
+                <div className='w-full flex justify-between items-center'>
+                    <span className='text-base font-semibold'>
+                        정보성 댓글 {sortedComments.length}개
+                    </span>
+                    <SortBox sortKey={sortKey} setSortKey={setSortKey} />
+                </div>
+            )}
+
+            {tab === 'opinion' && (
+                <div className='w-full flex justify-between items-center'>
+                    <div className='flex flex-col gap-1'>
+                        <span className='text-base font-semibold'>
+                            의견 클러스터 {CLUSTERS.length}개
+                        </span>
+                        <span className='text-zinc-500 text-sm'>
+                            편향 방지를 위해 AI가 유사한 의견들을 모아서 무작위로 보여드려요.
+                        </span>
+                    </div>
+                    <Filter
+                        label='조작 댓글 필터링 켜기'
+                        filterValue={onlyWithNonManipulated}
+                        setFilterValue={setOnlyWithNonManipulated}
+                    />
+                </div>
+            )}
+
+            {tab === 'question' && (
+                <div className='w-full flex justify-between items-center'>
+                    <span className='text-base font-semibold'>
+                        질문 {filteredCommentsWithReplies.length}개
+                    </span>
+                    <div className='flex items-center gap-4'>
+                        <Filter
+                            label='대댓글 달린 댓글만 보기'
+                            filterValue={onlyWithReplies}
+                            setFilterValue={setOnlyWithReplies}
+                        />
+                        <SortBox sortKey={sortKey} setSortKey={setSortKey} />
+                    </div>
+                </div>
+            )}
+
             {/* Comments Section */}
             {tab === 'information' && (
-                <Information
-                    comments={sortedComments}
-                    sortKey={sortKey}
-                    setSortKey={setSortKey}
-                    handleAddComment={handleAddComment}
-                />
+                <Information comments={sortedComments} handleAddComment={handleAddComment} />
             )}
 
             {tab === 'opinion' && (
@@ -205,7 +246,6 @@ const Detail: React.FC = () => {
                     <Cluster
                         clusters={CLUSTERS}
                         filterValue={onlyWithNonManipulated}
-                        setFilterValue={setOnlyWithNonManipulated}
                         onClickCluster={(clusterId) => setSelectedClusterId(clusterId)}
                         comments={comments}
                     />
@@ -227,10 +267,6 @@ const Detail: React.FC = () => {
             {tab === 'question' && (
                 <Question
                     comments={filteredCommentsWithReplies}
-                    filterValue={onlyWithReplies}
-                    setFilterValue={setOnlyWithReplies}
-                    sortKey={sortKey}
-                    setSortKey={setSortKey}
                     handleAddComment={handleAddComment}
                 />
             )}
