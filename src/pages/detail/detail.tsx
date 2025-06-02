@@ -163,9 +163,9 @@ const Detail: React.FC = () => {
     }, [selectedClusterId, onlyWithNonManipulated, comments])
 
     return (
-        <main className='flex flex-col gap-10 items-center justify-center'>
+        <main className='flex flex-col items-center justify-center'>
             {/* Video Section */}
-            <div className='w-full flex flex-col gap-2 mt-5'>
+            <div className='w-full flex flex-col gap-2 mt-5 mb-10'>
                 <div className='w-full aspect-video rounded-xl overflow-hidden'>
                     <iframe
                         width='100%'
@@ -189,52 +189,54 @@ const Detail: React.FC = () => {
                 onAddComment={handleAddComment}
             />
 
-            {/* Tab Section */}
-            <Tab tab={tab} setTab={setTab} />
+            <div className='sticky mt-5 mb-7 py-5 top-0 bg-white z-10 w-full flex flex-col gap-5 border-b border-zinc-200'>
+                {/* Tab Section */}
+                <Tab tab={tab} setTab={setTab} />
 
-            {/* Count, Filter, and Sort Section */}
-            {tab === 'information' && (
-                <div className='w-full flex justify-between items-center'>
-                    <span className='text-base font-semibold'>
-                        정보성 댓글 {sortedComments.length}개
-                    </span>
-                    <SortBox sortKey={sortKey} setSortKey={setSortKey} />
-                </div>
-            )}
-
-            {tab === 'opinion' && (
-                <div className='w-full flex justify-between items-center'>
-                    <div className='flex flex-col gap-1'>
+                {/* Count, Filter, and Sort Section */}
+                {tab === 'information' && (
+                    <div className='w-full flex justify-between items-center'>
                         <span className='text-base font-semibold'>
-                            의견 클러스터 {CLUSTERS.length}개
+                            정보성 댓글 {sortedComments.length}개
                         </span>
-                        <span className='text-zinc-500 text-sm'>
-                            편향 방지를 위해 AI가 유사한 의견들을 모아서 무작위로 보여드려요.
-                        </span>
-                    </div>
-                    <Filter
-                        label='조작 댓글 필터링 켜기'
-                        filterValue={onlyWithNonManipulated}
-                        setFilterValue={setOnlyWithNonManipulated}
-                    />
-                </div>
-            )}
-
-            {tab === 'question' && (
-                <div className='w-full flex justify-between items-center'>
-                    <span className='text-base font-semibold'>
-                        질문 {filteredCommentsWithReplies.length}개
-                    </span>
-                    <div className='flex items-center gap-4'>
-                        <Filter
-                            label='대댓글 달린 댓글만 보기'
-                            filterValue={onlyWithReplies}
-                            setFilterValue={setOnlyWithReplies}
-                        />
                         <SortBox sortKey={sortKey} setSortKey={setSortKey} />
                     </div>
-                </div>
-            )}
+                )}
+
+                {tab === 'opinion' && (
+                    <div className='w-full flex justify-between items-center'>
+                        <div className='flex flex-col gap-1'>
+                            <span className='text-base font-semibold'>
+                                의견 클러스터 {CLUSTERS.length}개
+                            </span>
+                            <span className='text-zinc-500 text-sm'>
+                                편향 방지를 위해 AI가 유사한 의견들을 모아서 무작위로 보여드려요.
+                            </span>
+                        </div>
+                        <Filter
+                            label='조작 댓글 필터링 켜기'
+                            filterValue={onlyWithNonManipulated}
+                            setFilterValue={setOnlyWithNonManipulated}
+                        />
+                    </div>
+                )}
+
+                {tab === 'question' && (
+                    <div className='w-full flex justify-between items-center'>
+                        <span className='text-base font-semibold'>
+                            질문 {filteredCommentsWithReplies.length}개
+                        </span>
+                        <div className='flex items-center gap-4'>
+                            <Filter
+                                label='대댓글 달린 댓글만 보기'
+                                filterValue={onlyWithReplies}
+                                setFilterValue={setOnlyWithReplies}
+                            />
+                            <SortBox sortKey={sortKey} setSortKey={setSortKey} />
+                        </div>
+                    </div>
+                )}
+            </div>
 
             {/* Comments Section */}
             {tab === 'information' && (
