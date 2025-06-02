@@ -25,7 +25,7 @@ const Header: React.FC = () => {
             </h1>
 
             {/* Search Bar */}
-            <div className='flex items-center bg-zinc-200 rounded-full px-4 w-[600px]'>
+            <div className='flex items-center bg-zinc-200 rounded-full px-4 max-w-[45dvw] w-full'>
                 <img src='/icons/search.svg' alt='검색' className='w-5 h-5 mr-2' />
                 <input
                     type='text'

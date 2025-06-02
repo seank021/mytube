@@ -11,7 +11,7 @@ main {
 }
 
 header {
-    @apply w-full max-w-[95%] mx-auto;
+    @apply w-full max-w-[95dvw] mx-auto;
 }
 
 .home {
