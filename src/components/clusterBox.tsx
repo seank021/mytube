@@ -57,7 +57,7 @@ const ClusterBox: React.FC<ClusterBoxProps> = ({
             className='flex justify-between items-center p-6 rounded-lg border border-zinc-200 shadow-sm cursor-pointer hover:shadow-md transition'
             onClick={() => onClick?.(cluster.id)}
         >
-            <div className='flex flex-col gap-2'>
+            <div className='flex flex-col h-[110px] w-1/2 justify-between'>
                 <div className='flex items-center gap-4'>
                     <h3 className='text-xl font-bold text-zinc-950'>{cluster.name}</h3>
                     <div className='flex items-center gap-1'>
@@ -89,9 +89,9 @@ const ClusterBox: React.FC<ClusterBoxProps> = ({
             </div>
 
             {/* Graph */}
-            <div className='h-full w-1/2 p-5 bg-gray-100 rounded-lg'>
+            <div className='h-[110px] w-1/2 rounded-lg'>
                 {graphData && graphData.length > 0 ? (
-                    <ResponsiveContainer width='100%' height={150}>
+                    <ResponsiveContainer width='100%' height={110}>
                         <LineChart data={graphData}>
                             <CartesianGrid strokeDasharray='3 3' />
                             <XAxis dataKey='time' hide tick={{ fontSize: 10 }} />
