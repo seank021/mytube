@@ -2,7 +2,7 @@ import React from 'react'
 import { BrowserRouter as Router, Route, Routes, Navigate, useLocation } from 'react-router-dom'
 import Header from '../components/header'
 import Home from './home'
-import Detail from './detail'
+import Detail from './detail/detail'
 import Login from './login'
 
 const AppRoutes: React.FC = () => {
