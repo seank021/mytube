@@ -5,6 +5,7 @@ const REPORT_REASONS: string[] = [
     '부적절한 표현',
     '편향된 내용',
     '잘못된 카테고리',
+    '봇 의심',
     '기타',
 ]
 
@@ -26,7 +27,7 @@ const ReportPopover: React.FC<{
     const selectedArray = Array.from(selected)
 
     return (
-        <div className='flex flex-col bg-white rounded-xl shadow-lg border px-6 py-4 w-[320px] gap-3'>
+        <div className='flex flex-col bg-white rounded-xl shadow-lg border px-6 py-4 w-[340px] gap-3'>
             <h3 className='text-base font-medium text-zinc-950'>신고</h3>
             <div className='flex flex-wrap gap-2'>
                 {REPORT_REASONS.map((reason) => (

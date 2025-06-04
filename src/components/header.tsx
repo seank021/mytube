@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
 import AuthPopover from './authPopover'
+import { useAuth } from '../contexts/authContext'
 
 const Header: React.FC = () => {
+    const { isUser } = useAuth()
+
     const onClickLogin = () => {
         window.location.href = '/login'
     }
@@ -11,8 +14,6 @@ const Header: React.FC = () => {
     const onClickLogout = () => {
         setShowAuthPopover(true)
     }
-
-    const isUser: boolean = localStorage.getItem('isUser') === 'true'
 
     return (
         <header className='flex w-full items-center justify-between px-16 py-6'>

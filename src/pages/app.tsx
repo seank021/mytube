@@ -4,9 +4,10 @@ import Header from '../components/header'
 import Home from './home'
 import Detail from './detail/detail'
 import Login from './login'
+import { useAuth, AuthProvider } from '../contexts/authContext'
 
 const AppRoutes: React.FC = () => {
-    const isUser: boolean = localStorage.getItem('isUser') === 'true'
+    const { isUser } = useAuth()
     const location = useLocation()
     const hideHeader: boolean = location.pathname === '/login'
 
@@ -25,9 +26,11 @@ const AppRoutes: React.FC = () => {
 
 const App: React.FC = () => {
     return (
-        <Router>
-            <AppRoutes />
-        </Router>
+        <AuthProvider>
+            <Router>
+                <AppRoutes />
+            </Router>
+        </AuthProvider>
     )
 }
 

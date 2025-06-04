@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useAuth } from '../contexts/authContext'
 import ReportPopover from './reportPopover'
 import Toast from './toast'
 import AuthPopover from './authPopover'
@@ -44,7 +45,9 @@ const Comment: React.FC<CommentProps> = ({
         message: string
         errorDetail?: string
     } | null>(null)
-    const isUser: boolean = localStorage.getItem('isUser') === 'true'
+
+    const { isUser } = useAuth()
+
     const [showAuthPopoverReaction, setShowAuthPopoverReaction] = useState(false)
     const [showAuthPopoverReport, setShowAuthPopoverReport] = useState(false)
     const [isReported, setIsReported] = useState(false)
