@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react'
+import { useAuth } from '../contexts/authContext'
 import AuthPopover from './authPopover'
 import Toast from './toast'
 import Loader from './loader'
@@ -34,7 +35,8 @@ const CommentWriteForm: React.FC<CommentWriteFormProps> = ({
     onAddComment,
     onSuccessWithMessage,
 }) => {
-    const isUser: boolean = localStorage.getItem('isUser') === 'true'
+    const { isUser } = useAuth()
+
     const [text, setText] = useState('')
     const [showAuthPopover, setShowAuthPopover] = useState(false)
     const containerRef = useRef<HTMLDivElement>(null)

@@ -12,6 +12,17 @@ const Tab: React.FC<{
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
+            // 입력창에 focus 중이면 Tab 이동 막지 않음
+            const active = document.activeElement
+            if (
+                active &&
+                (active.tagName === 'INPUT' ||
+                    active.tagName === 'TEXTAREA' ||
+                    active.getAttribute('contenteditable') === 'true')
+            ) {
+                return
+            }
+
             if (e.key === 'Tab') {
                 e.preventDefault() // 기본 탭 이동 막기
                 const currentIndex = tabs.findIndex((t) => t.key === tab)
