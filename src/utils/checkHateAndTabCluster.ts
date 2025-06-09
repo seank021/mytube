@@ -1,6 +1,6 @@
 const isDEV = true
 const API_URL = isDEV ? 'http://127.0.0.1:3000/classify' : 'https://hci-aiml.onrender.com/classify'
-const useDummy = true
+const useDummy = false
 
 export const checkHateAndTabCluster = async (
     text: string,
