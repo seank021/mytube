@@ -118,7 +118,7 @@ const CommentWriteForm: React.FC<CommentWriteFormProps> = ({
                 setToast({
                     type: 'failure',
                     message: '댓글 등록 중 오류가 발생했습니다.',
-                    errorDetail: '서버와의 통신에 실패했습니다. 잠시 후 다시 시도해주세요.',
+                    errorDetail: '서버 연결을 확인 후 다시 시도해주세요.',
                 })
                 setTimeout(() => setToast(null), 4000)
                 return
